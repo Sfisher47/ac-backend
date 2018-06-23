@@ -19,13 +19,13 @@
 	{
 		private	$_id;
 		private	$_title;
-		private $_description;
+		private	$_description;
 		private	$_required;
 		private	$_collected;
-		private $_actionId;
-		private $_extraId;
+		private	$_actionId;
+		private	$_extraId;
 
-		public static $_verbose = false;
+		public static	$_verbose = false;
 
 // Constructor
 		function	__construct()

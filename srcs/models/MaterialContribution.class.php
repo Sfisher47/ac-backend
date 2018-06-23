@@ -2,34 +2,33 @@
 
 /* ************************************************************************** */
 /*                                                                            */
-/*  MoneyParticipation.class.php                                              */
+/*  MaterialContribution.class.php                                            */
 /*                                                                            */
 /*   By: elhmn <www.elhmn.com>                                                */
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
-/*   Created: Sat Jun 23 10:47:03 2018                        by elhmn        */
-/*   Updated: Sat Jun 23 12:00:47 2018                        by elhmn        */
+/*   Created: Sat Jun 23 18:28:05 2018                        by elhmn        */
+/*   Updated: Sat Jun 23 18:45:45 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
 ?>
 
 <?php
-	class	MoneyParticipation
+	class	MaterialContribution
 	{
-		private $_id;
-		private $_userID;
-		private $_actionId;
-		private	$_extraID;
-		private $_moneyNeedId;
-		private $_amount;
+		private	$_id;
+		private	$_userId;
+		private	$_actionId;
+		private	$_extraId;
+		private	$_materialNeedId;
 
 		public static	$_verbose = false;
 
 // Constructor
 		function	__construct()
 		{
-			if (MoneyParticipation::$_verbose)
+			if (MaterialContribution::$_verbose)
 			{
 				echo __CLASS__." constructor called";
 			}
@@ -38,7 +37,7 @@
 // Destructor
 		function	__destruct()
 		{
-			if (MoneyParticipation::$_verbose)
+			if (MaterialContribution::$_verbose)
 			{
 				echo __CLASS__." destructor called";
 			}

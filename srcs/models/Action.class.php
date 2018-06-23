@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Sat Jun 23 10:47:03 2018                        by elhmn        */
-/*   Updated: Sat Jun 23 11:59:35 2018                        by elhmn        */
+/*   Updated: Sat Jun 23 18:42:50 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 	{
 		private	$_id;
 		private	$_title;
+		private	$_street;
+		private	$_address_info;
+		private	$_postal_code;
 		private	$_description;
 		private	$_city;
 		private	$_country;

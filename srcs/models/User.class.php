@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Sat Jun 23 10:47:03 2018                        by elhmn        */
-/*   Updated: Sat Jun 23 12:00:51 2018                        by elhmn        */
+/*   Updated: Sat Jun 23 18:35:02 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 		private	$_login;
 		private	$_email;
 		private	$_password;
-		private $_gender;
+		private	$_gender;
 		private	$_city;
 		private	$_country;
 		private	$_phoneNumber;

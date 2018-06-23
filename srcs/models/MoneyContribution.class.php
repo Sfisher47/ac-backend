@@ -2,41 +2,34 @@
 
 /* ************************************************************************** */
 /*                                                                            */
-/*  Extra.class.php                                                           */
+/*  MoneyContribution.class.php                                               */
 /*                                                                            */
 /*   By: elhmn <www.elhmn.com>                                                */
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
-/*   Created: Sat Jun 23 11:34:06 2018                        by elhmn        */
-/*   Updated: Sat Jun 23 18:33:12 2018                        by elhmn        */
+/*   Created: Sat Jun 23 18:26:06 2018                        by elhmn        */
+/*   Updated: Sat Jun 23 18:29:11 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
 ?>
 
 <?php
-	class	Extra
+	class	MoneyContributions
 	{
 		private	$_id;
-		private	$_title;
-		private	$_street;
-		private	$_address_info;
-		private	$_postal_code;
-		private	$_description;
-		private	$_city;
-		private	$_country;
-		private	$_date;
-		private	$_time;
-		private	$_duration;
 		private	$_userId;
-		private	$_creationDate;
+		private	$_actionId;
+		private	$_extraId;
+		private	$_moneyNeedId;
+		private	$_amount;
 
 		public static	$_verbose = false;
 
 // Constructor
 		function	__construct()
 		{
-			if (Extra::$_verbose)
+			if (MoneyContribution::$_verbose)
 			{
 				echo __CLASS__." constructor called";
 			}
@@ -45,15 +38,11 @@
 // Destructor
 		function	__destruct()
 		{
-			if (Extra::$_verbose)
+			if (MoneyContribution::$_verbose)
 			{
 				echo __CLASS__." destructor called";
 			}
 		}
-
-// Getters
-
-// Setters
 
 	};
 ?>
