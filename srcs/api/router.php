@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Thu Jun 28 18:21:24 2018                        by bmbarga      */
+/*   Updated: Fri Jun 29 09:49:48 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,18 @@
 		];
 
 		print_r($_SERVER); // Debug
-		if (!isset($_SERVER['REQUEST_URI']))
+
+		if (!isset($_SERVER['REQUEST_URI'])
+				|| !isset($_SERVER['REQUEST_METHOD']))
 		{
-			log_error('$_SERVER["REQUEST_URI"]', __FILE__, __LINE__);
+			bm_error('$_SERVER : missing fields', __FILE__, __LINE__);
 			return (0);
 		}
-		$request = new Request($_SERVER['REQUEST_URI']);
+
+		Request::$verbose = true;
+		$request = new Request($_SERVER['REQUEST_URI'],
+						$_SERVER['REQUEST_METHOD']);
+		echo $request; // Debug
 	}
 
 	main();
