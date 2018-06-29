@@ -2,13 +2,13 @@
 
 /* ************************************************************************** */
 /*                                                                            */
-/*  Request.class.php                                                         */
+/*  Uri.class.php                                                             */
 /*                                                                            */
 /*   By: elhmn <www.elhmn.com>                                                */
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Fri Jun 29 11:07:56 2018                        by bmbarga      */
+/*   Updated: Fri Jun 29 15:19:26 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 
 <?php
 
-	class		Request
+	class		Uri
 	{
 		public static		$verbose = false;
 
 		public	$id;
 		public	$apiVersion;
-		public	$privateKey;
+		public	$apiKey;
 		public	$method;
 		public	$endPoint;
 
@@ -66,7 +66,7 @@
 			$data_arr = array_values($data_arr);
 
  			$this->apiVersion = (isset($data_arr[0])) ? $data_arr[0] : null;
- 			$this->privateKey = (isset($data_arr[1])) ? $data_arr[1] : null;
+ 			$this->apiKey = (isset($data_arr[1])) ? $data_arr[1] : null;
  			$this->endPoint = (isset($data_arr[2])) ? $data_arr[2] : null;
  			$this->id = (isset($data_arr[3])) ? $data_arr[3] : null;
 		}
@@ -76,7 +76,7 @@
 			return (__CLASS__ ." : \n{"
 				. "\n\tmethod = [$this->method], "
 				. "\n\tapiVersion = [$this->apiVersion], "
-				. "\n\tprivateKey = [$this->privateKey], "
+				. "\n\tapiKey = [$this->apiKey], "
 				. "\n\tendPoint = [$this->endPoint], "
 				. "\n\tid = [$this->id]"
 				."\n}\n"

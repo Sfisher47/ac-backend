@@ -2,22 +2,25 @@
 
 /* ************************************************************************** */
 /*                                                                            */
-/*  index.php                                                                 */
+/*  IRequestHandler.class.php                                                 */
 /*                                                                            */
 /*   By: elhmn <www.elhmn.com>                                                */
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
-/*   Created: Thu Jun 28 14:15:31 2018                        by elhmn        */
-/*   Updated: Fri Jun 29 15:36:39 2018                        by bmbarga      */
+/*   Created:                                                 by elhmn        */
+/*   Updated: Fri Jun 29 15:30:35 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
-require_once('srcs/errors/error.php');
-require_once('srcs/api/Uri.class.php');
-require_once('srcs/api/Database.class.php');
-require_once('srcs/api/IRequestHandler.class.php');
-require_once('srcs/api/users/UserRequest.class.php');
-require_once('srcs/api/Config.class.php');
-require_once('srcs/api/router.php');
+?>
 
+<?php
+	interface	IRequestHandler
+	{
+		public	function	Post();
+		public	function	Get();
+		public	function	Put();
+		public	function	Delete();
+		public	function	Update();
+	}
 ?>
