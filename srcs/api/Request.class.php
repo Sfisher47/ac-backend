@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Fri Jun 29 09:58:21 2018                        by bmbarga      */
+/*   Updated: Fri Jun 29 11:07:56 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@
 
 		public function		__toString()
 		{
-			return ("Request : \n{"
+			return (__CLASS__ ." : \n{"
 				. "\n\tmethod = [$this->method], "
 				. "\n\tapiVersion = [$this->apiVersion], "
 				. "\n\tprivateKey = [$this->privateKey], "
