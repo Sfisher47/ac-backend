@@ -49,7 +49,8 @@
 		$gender = 'male';
 
 		$get = 'SELECT * FROM Users';
-		$insert = "INSERT INTO Users (login, email, password, signup_date, gender)"
+		$insert = "INSERT INTO Users (login, email, password,"
+				. "signup_date, gender)"
 				. " VALUES(:login, :email, :password, :signup_date, :gender)";
 
 		$stmt_insert = $pdo->prepare($insert);

@@ -8,13 +8,9 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Fri Jun 29 17:47:58 2018                        by bmbarga      */
+/*   Updated: Sat Jun 30 16:50:55 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
-
-?>
-
-<?php
 
 //plateform toggler
 $ac_script = isset($_SERVER['AC_SCRIPT']);
@@ -38,7 +34,7 @@ function		IsHandledUri($uri)
 
 	if (empty($uri->apiKey))
 	{
-		bm_error("require a api key ", __FILE__, __LINE__);
+		bm_error("require an api key ", __FILE__, __LINE__);
 		return false;
 	}
 
@@ -80,11 +76,15 @@ function		IsAuthorized($uri)
 
 function CreateUserRequest() { return (new UserRequest()); };
 
-function		HandleRequest($uri)
+function		HandleRequest($uri, $db)
 {
 
 	$create = [
 		'users' => 'CreateUserRequest',
+	];
+
+	$methods = [
+		'post' => 'Post',
 	];
 
 	if (!$GLOBALS['ac_script'])
@@ -96,32 +96,36 @@ function		HandleRequest($uri)
 		}
 	}
 
-	UserRequest::$verbose = true;
+	if (!$db)
+	{
+		bm_error("db set to null", __FILE__, __LINE__);
+		return (-1);
+	}
 
-	print_r($create);
+// 	UserRequest::$verbose = true;
 
-	echo "uri : $uri->endPoint". PHP_EOL; // Debug
+// 	print_r($create);
+
+// 	echo "uri : $uri->endPoint". PHP_EOL; // Debug
 // 	echo "echo : ${create[$uri->endPoint]}". PHP_EOL; // Debug
 
-	$elem = call_user_func($create[$uri->endPoint]);
+	$elem = call_user_func("${create[$uri->endPoint]}", $db);
 	if (!$elem)
 	{
 		bm_error("", __FILE__, __LINE__);
 		return (-1);
 	}
 
-	$elem->Post();
-	$elem->Put();
-	$elem->Update();
-	$elem->Get();
-	$elem->Delete();
+// 	echo "methods[$uri->method] = ${methods[$uri->method]}"; // Debug
 
-	echo __FUNCTION__. PHP_EOL;
+	$elem->{$methods[$uri->method]}($db);
+
+// 	echo __FUNCTION__. PHP_EOL; // Debug
 }
 
 function		Run()
 {
-	print_r($_SERVER); // Debug
+// 	print_r($_SERVER); // Debug
 
 	if (!$GLOBALS['ac_script'])
 	{
@@ -151,20 +155,23 @@ function		Run()
 			return (0);
 		}
 	}
+	else
+	{
+		$uri = new Uri("v1/admin/users/", "post");
+	}
 
 	//Create Database
-	Database::$verbose = true;
 	$db = new Database();
-	if ($db === null)
+	if (!$db)
 	{
 		bm_error('DataBase set to null', __FILE__, __LINE__);
 		return (-1);
 	}
 
-	HandleRequest($uri);
+	HandleRequest($uri, $db);
 }
 
-run();
+Run();
 // 	If the method is handled then call the right function method accoring
 // 	to the url parameter
 ?>

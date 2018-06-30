@@ -8,13 +8,9 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Fri Jun 29 09:17:39 2018                        by bmbarga      */
+/*   Updated: Sat Jun 30 17:00:36 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
-
-?>
-
-<?php
 
 function	bm_error($str = "", $filename = "", $line = "")
 {

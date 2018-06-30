@@ -8,13 +8,9 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Fri Jun 29 15:19:26 2018                        by bmbarga      */
+/*   Updated: Sat Jun 30 13:58:19 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
-
-?>
-
-<?php
 
 	class		Uri
 	{

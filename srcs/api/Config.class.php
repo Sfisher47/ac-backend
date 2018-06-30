@@ -8,13 +8,9 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Fri Jun 29 12:34:32 2018                        by bmbarga      */
+/*   Updated: Sat Jun 30 12:18:27 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
-
-?>
-
-<?php
 
 	class		Config
 	{
@@ -27,10 +23,10 @@
 
 		public static		$methods = [
 			'get',
-// 			'post',
-// 			'put',
-// 			'update',
-// 			'delete'
+			'post',
+			'put',
+			'update',
+			'delete'
 		];
 
 		public static		$endPoints = [

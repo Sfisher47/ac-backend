@@ -8,10 +8,11 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:15:31 2018                        by elhmn        */
-/*   Updated: Fri Jun 29 15:36:39 2018                        by bmbarga      */
+/*   Updated: Sat Jun 30 12:34:09 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
+require_once('srcs/models/User.class.php');
 require_once('srcs/errors/error.php');
 require_once('srcs/api/Uri.class.php');
 require_once('srcs/api/Database.class.php');

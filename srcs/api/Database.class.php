@@ -8,13 +8,10 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jan 01 01:00:00 1970                        by elhmn        */
-/*   Updated: Fri Jun 29 14:45:14 2018                        by bmbarga      */
+/*   Updated: Sat Jun 30 16:50:33 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
-?>
-
-<?php
 	class	Database
 	{
 		public static		$verbose = false;
@@ -50,7 +47,8 @@
 		public function		Connect()
 		{
 // 			for Unix based system running on socket mode
-			$dsn = 'mysql:unix_socket=/Applications/MAMP/tmp/mysql/mysql.sock'. ';dbname=' . $this->db_name;
+			$dsn = 'mysql:unix_socket=/Applications/MAMP/tmp/mysql/mysql.sock'.
+				';dbname=' . $this->db_name;
 // 			else
 // 				$dsn = 'mysql:host=' . $host . ';dbname=' . $dbname;
 			try
