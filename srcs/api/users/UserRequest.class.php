@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jun 30 16:50:48 2018                        by bmbarga      */
+/*   Updated: Sun Jul 01 12:37:13 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@
 										"gender" : "male"
 									}');
 			}
+			$data = UserPostUtilities::SanitizeData($data);
 			print_r($data); // Debug
+			if (!UserPostUtilities::CanBePosted($data, $db, $this->table))
+				return (-1);
 
 			$query = 'INSERT INTO ' . $this->table
 					. ' SET
@@ -108,30 +111,18 @@
 			$stmt = $conn->prepare($query);
 			try
 			{
-				$stmt->bindParam(':login',
-					htmlspecialchars(strip_tags(($data->login))));
-				$stmt->bindParam(':firstname',
-					htmlspecialchars(strip_tags(($data->firstname))));
-				$stmt->bindParam(':lastname',
-					htmlspecialchars(strip_tags(($data->lastname))));
-				$stmt->bindParam(':password',
-					htmlspecialchars(strip_tags(($data->password))));
-				$stmt->bindParam(':email',
-					htmlspecialchars(strip_tags(($data->email))));
-				$stmt->bindParam(':city',
-					htmlspecialchars(strip_tags(($data->city))));
-				$stmt->bindParam(':country',
-					htmlspecialchars(strip_tags(($data->country))));
-				$stmt->bindParam(':bio',
-					htmlspecialchars(strip_tags(($data->bio))));
-				$stmt->bindParam(':picture',
-					htmlspecialchars(strip_tags(($data->picture))));
-				$stmt->bindParam(':phonenumber',
-					htmlspecialchars(strip_tags(($data->phonenumber))));
-				$stmt->bindParam(':signupdate',
-					htmlspecialchars(strip_tags(($data->signupdate))));
-				$stmt->bindParam(':gender',
-					htmlspecialchars(strip_tags(($data->gender))));
+				$stmt->bindParam(':login', $data->login);
+				$stmt->bindParam(':firstname', $data->firstname);
+				$stmt->bindParam(':lastname', $data->lastname);
+				$stmt->bindParam(':password', $data->password);
+				$stmt->bindParam(':email', $data->email);
+				$stmt->bindParam(':city', $data->city);
+				$stmt->bindParam(':country', $data->country);
+				$stmt->bindParam(':bio', $data->bio);
+				$stmt->bindParam(':picture', $data->picture);
+				$stmt->bindParam(':phonenumber', $data->phonenumber);
+				$stmt->bindParam(':signupdate', $data->signupdate);
+				$stmt->bindParam(':gender', $data->gender);
 			}
 			catch (Exception $e)
 			{
