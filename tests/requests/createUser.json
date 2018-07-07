@@ -1,9 +1,9 @@
 {
-	"login" : "user1",
+	"login" : "user12",
 	"firstname" : "Boris",
 	"lastname" : "Mbarga",
-	"password" : "password",
-	"email" : "bmbarga@email.com",
+ 	"password" : "password",
+	"email" : "bmbarg@email.com",
 	"city" : "Yaounde",
 	"country" : "Cameroun",
 	"bio" : "Je suis con",

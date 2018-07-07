@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sat Jul 07 10:08:32 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 11:20:17 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ function		HandleRequest($uri, $db)
 
 	$methods = [
 		'post' => 'Post',
+		'get' => 'Get',
 	];
 
 	if (!$GLOBALS['ac_script'])
@@ -120,9 +121,7 @@ function		HandleRequest($uri, $db)
 		return (-1);
 	}
 
-// 	echo "methods[$uri->method] = ${methods[$uri->method]}"; // Debug
-
-	$elem->{$methods[$uri->method]}($db);
+	$elem->{$methods[$uri->method]}(['db' => $db, 'id' => $uri->id]);
 
 // 	echo __FUNCTION__. PHP_EOL; // Debug
 }

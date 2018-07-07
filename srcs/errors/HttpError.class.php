@@ -9,7 +9,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 09:59:26 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 10:01:16 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 	{
 		public static	$errorCodes = array(
 			204 => array('204 No Content', 'No content.'),
+			201 => array('201 Created', 'Created'),
 			304 => array('304 No Content', 'Not Modified.'),
 			400 => array('400 Bad Request', 'The request cannot be fulfilled due to bad syntax.'),
 			403 => array('403 Forbidden', 'The server has refused to fulfil your request.'),

@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 08:12:24 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 10:54:11 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 		public static		$methods = [
 			'get',
 			'post',
-			'put',
-			'update',
-			'delete'
+// 			'put',
+// 			'update',
+// 			'delete'
 		];
 
 		public static		$endPoints = [

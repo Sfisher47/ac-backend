@@ -8,16 +8,9 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 10:00:16 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 12:08:18 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
-
-// header('Access-Control-Allow-Origin : *');
-// header('Content-Type : application/json');
-// header('Access-Control-Allow-Methods : POST');
-// header('Access-Control-Allow-Headers : Access-Control-Allow-Header,
-// 		Content-Type, Access-Control-Allow-Methods, Authorization,
-// 		X-Requested-With');
 
 	class		UserRequest implements IRequestHandler
 	{
@@ -43,18 +36,51 @@
 		}
 
 		//IRequestHandler function override
-		public function		Get($db)
+		public function		Get($kwarg)
 		{
+			if (!$kwarg
+					|| !is_array($kwarg))
+			{
+				internal_error('kwarg not array or set to null',
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			$id = $kwarg['id'];
+			$db = $kwarg['db'];
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-			echo __FUNCTION__ . PHP_EOL;
+			$query = (!$id) ? "SELECT * FROM " . $this->table
+									: "SELECT * FROM " . $this->table
+										. " WHERE id = $id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
+			echo json_encode($ret); // Debug
 		}
 
-		public function		Post($db)
+		public function		Post($kwarg)
 		{
+			if (!$kwarg
+					|| !is_array($kwarg))
+			{
+				internal_error('kwarg not array or set to null',
+								__FILE__, __LINE__);
+				return (-1);
+			}
+
+			$db = $kwarg['db'];
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -89,7 +115,14 @@
 									}');
 			}
 			$data = UserPostUtilities::SanitizeData($data);
-			print_r($data); // Debug
+
+			//check credentials
+			if (empty($data->password))
+			{
+				http_error(400, "Empty password");
+				return (-1);
+			}
+
 			if (!UserPostUtilities::CanBePosted($data, $db, $this->table))
 			{
 				http_error(409); //Resource exists
@@ -139,6 +172,7 @@
 				internal_error("stmt->execute : ", __FILE__, __LINE__);
 				return (-1);
 			}
+			http_error(201);
 		}
 
 		public function		Put($db)
@@ -148,7 +182,6 @@
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-// 			echo __FUNCTION__ . PHP_EOL;
 		}
 
 		public function		Update($db)
@@ -158,7 +191,6 @@
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-// 			echo __FUNCTION__ . PHP_EOL;
 		}
 
 		public function		Delete($db)
@@ -168,7 +200,6 @@
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-// 			echo __FUNCTION__ . PHP_EOL;
 		}
 	}
 ?>
