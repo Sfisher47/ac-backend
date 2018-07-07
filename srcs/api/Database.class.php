@@ -56,7 +56,7 @@
 				$this->conn = new PDO($dsn, $this->username, $this->password);
 				if (!$this->conn)
 				{
-					bm_error("this->conn set to null", __FILE__, __LINE__);
+					internal_error("this->conn set to null", __FILE__, __LINE__);
 					return (null);
 				}
 				$this->conn->setAttribute(PDO::ATTR_ERRMODE,
@@ -64,7 +64,7 @@
 			}
 			catch (PDOException $e)
 			{
-				bm_error("Connection : $e->getMessage()", __FILE__, __LINE__);
+				internal_error("Connection : $e->getMessage()", __FILE__, __LINE__);
 				return (null);
 			}
 			return ($this->conn);

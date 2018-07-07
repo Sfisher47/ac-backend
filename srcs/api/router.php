@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sun Jul 01 08:20:50 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 10:08:32 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ function		IsHandledUri($uri)
 {
 	if (!$uri)
 	{
-		bm_error("uri set to null", __FILE__, __LINE__);
+		internal_error("uri set to null", __FILE__, __LINE__);
 		return (false);
 	}
 
@@ -28,13 +28,15 @@ function		IsHandledUri($uri)
 		|| array_search($uri->apiVersion,
 				Config::$apiVersions) === FALSE)
 	{
-		bm_error("wrong apiVersion : $uri->apiVersion", __FILE__, __LINE__);
+		internal_error("wrong apiVersion : $uri->apiVersion", __FILE__, __LINE__);
+		http_error(400, 'wrong api version');
 		return false;
 	}
 
 	if (empty($uri->apiKey))
 	{
-		bm_error("require an api key ", __FILE__, __LINE__);
+		internal_error("require an api key ", __FILE__, __LINE__);
+		http_error(400, 'require an api key');
 		return false;
 	}
 
@@ -42,14 +44,16 @@ function		IsHandledUri($uri)
 		|| array_search($uri->endPoint,
 				Config::$endPoints) === FALSE)
 	{
-		bm_error("wrong endPoint : $uri->endPoint", __FILE__, __LINE__);
+		internal_error("wrong endPoint : $uri->endPoint", __FILE__, __LINE__);
+		http_error(400, 'wrong endPoint');
 		return false;
 	}
 	if (empty($uri->method)
 		|| array_search($uri->method,
 				Config::$methods) === FALSE)
 	{
-		bm_error("Unhandled method : $uri->method", __FILE__, __LINE__);
+		internal_error("Unhandled method : $uri->method", __FILE__, __LINE__);
+		http_error(405);
 		return false;
 	}
 	return true;
@@ -59,7 +63,7 @@ function		IsAuthorized($uri)
 {
 	if (!$uri)
 	{
-		bm_error("uri set to null", __FILE__, __LINE__);
+		internal_error("uri set to null", __FILE__, __LINE__);
 		return (false);
 	}
 
@@ -68,7 +72,7 @@ function		IsAuthorized($uri)
 	//Later we intend to load apikey from the DB
 	if ($uri->apiKey !== $_SERVER['AC_ADMIN'])
 	{
-		bm_error("wrong key : unauthorized : $uri->apiKey", __FILE__, __LINE__);
+		internal_error("wrong key : unauthorized : $uri->apiKey", __FILE__, __LINE__);
 		return (false);
 	}
 	return (true);
@@ -91,14 +95,14 @@ function		HandleRequest($uri, $db)
 	{
 		if (!$uri)
 		{
-			bm_error("uri set to null", __FILE__, __LINE__);
+			internal_error("uri set to null", __FILE__, __LINE__);
 			return (false);
 		}
 	}
 
 	if (!$db)
 	{
-		bm_error("db set to null", __FILE__, __LINE__);
+		internal_error("db set to null", __FILE__, __LINE__);
 		return (-1);
 	}
 
@@ -112,7 +116,7 @@ function		HandleRequest($uri, $db)
 	$elem = call_user_func("${create[$uri->endPoint]}", $db);
 	if (!$elem)
 	{
-		bm_error("", __FILE__, __LINE__);
+		internal_error("", __FILE__, __LINE__);
 		return (-1);
 	}
 
@@ -133,7 +137,7 @@ function		Run()
 		if (!isset($_SERVER['REQUEST_URI'])
 				|| !isset($_SERVER['REQUEST_METHOD']))
 		{
-			bm_error('$_SERVER : missing fields', __FILE__, __LINE__);
+			internal_error('$_SERVER : missing fields', __FILE__, __LINE__);
 			return (-1);
 		}
 
@@ -144,14 +148,15 @@ function		Run()
 		//Check if the uri was properly formatted
 		if (!IsHandledUri($uri))
 		{
-			bm_error('Bad uri', __FILE__, __LINE__);
+			internal_error('Bad uri', __FILE__, __LINE__);
 			return (-1);
 		}
 
 		//Check authorization level
 		if (!IsAuthorized($uri))
 		{
-			bm_error('Bad uri : unauthorized', __FILE__, __LINE__);
+			internal_error('Bad uri : unauthorized', __FILE__, __LINE__);
+			http_error(403);
 			return (0);
 		}
 	}
@@ -164,7 +169,7 @@ function		Run()
 	$db = new Database();
 	if (!$db)
 	{
-		bm_error('DataBase set to null', __FILE__, __LINE__);
+		internal_error('DataBase set to null', __FILE__, __LINE__);
 		return (-1);
 	}
 

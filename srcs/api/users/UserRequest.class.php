@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Jul 01 12:37:13 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 10:00:16 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 		{
 			if (!$db)
 			{
-				bm_error("db set to null", __FILE__, __LINE__);
+				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
 			echo __FUNCTION__ . PHP_EOL;
@@ -57,7 +57,7 @@
 		{
 			if (!$db)
 			{
-				bm_error("db set to null", __FILE__, __LINE__);
+				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
 
@@ -66,7 +66,8 @@
 				$data = json_decode(file_get_contents("php://input"));
 				if (!$data)
 				{
-					bm_error("data set to null", __FILE__, __LINE__);
+					internal_error("data set to null", __FILE__, __LINE__);
+					http_error(204); //No Content
 					return (-1);
 				}
 			}
@@ -90,7 +91,10 @@
 			$data = UserPostUtilities::SanitizeData($data);
 			print_r($data); // Debug
 			if (!UserPostUtilities::CanBePosted($data, $db, $this->table))
+			{
+				http_error(409); //Resource exists
 				return (-1);
+			}
 
 			$query = 'INSERT INTO ' . $this->table
 					. ' SET
@@ -126,13 +130,13 @@
 			}
 			catch (Exception $e)
 			{
-				bm_error("stmt->bindParam : " . $e->getMessage(),
+				internal_error("stmt->bindParam : " . $e->getMessage(),
 							__FILE__, __LINE__);
 				return (-1);
 			}
 			if (!$stmt->execute())
 			{
-				bm_error("stmt->execute : ", __FILE__, __LINE__);
+				internal_error("stmt->execute : ", __FILE__, __LINE__);
 				return (-1);
 			}
 		}
@@ -141,7 +145,7 @@
 		{
 			if (!$db)
 			{
-				bm_error("db set to null", __FILE__, __LINE__);
+				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
 // 			echo __FUNCTION__ . PHP_EOL;
@@ -151,7 +155,7 @@
 		{
 			if (!$db)
 			{
-				bm_error("db set to null", __FILE__, __LINE__);
+				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
 // 			echo __FUNCTION__ . PHP_EOL;
@@ -161,7 +165,7 @@
 		{
 			if (!$db)
 			{
-				bm_error("db set to null", __FILE__, __LINE__);
+				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
 // 			echo __FUNCTION__ . PHP_EOL;

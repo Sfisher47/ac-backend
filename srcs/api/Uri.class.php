@@ -32,7 +32,7 @@
 
 			if (!is_string($uri))
 			{
-				bm_error('uri', __FILE__, __LINE__);
+				internal_error('uri', __FILE__, __LINE__);
 				return null;
 			}
 			$this->ExtractUrlData($uri);
@@ -54,7 +54,7 @@
 
 			if (!is_string($uri))
 			{
-				bm_error('uri', __FILE__, __LINE__);
+				internal_error('uri', __FILE__, __LINE__);
 				return (0);
 			}
 			$data_arr = explode('/', $uri);

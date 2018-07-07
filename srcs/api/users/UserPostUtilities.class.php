@@ -19,7 +19,7 @@ class		UserPostUtilities
 	{
 		if (!$data)
 		{
-			bm_error("data set to null", __FILE__, __LINE__);
+			internal_error("data set to null", __FILE__, __LINE__);
 			return(null);
 		}
 
@@ -43,18 +43,18 @@ class		UserPostUtilities
 	{
 		if (!$data)
 		{
-			bm_error("data set to null", __FILE__, __LINE__);
+			internal_error("data set to null", __FILE__, __LINE__);
 			return(false);
 		}
 		if (!$db)
 		{
-			bm_error("db set to null", __FILE__, __LINE__);
+			internal_error("db set to null", __FILE__, __LINE__);
 			return(false);
 		}
 
 		if (!($conn = $db->Connect()))
 		{
-			bm_error("conn set to null", __FILE__, __LINE__);
+			internal_error("conn set to null", __FILE__, __LINE__);
 			return (false);
 		}
 		//Check if login already exists
@@ -67,13 +67,13 @@ class		UserPostUtilities
 			$ret = $stmtLogin->fetchAll(PDO::FETCH_ASSOC);
 			if ($ret)
 			{
-				bm_error("login already exists", __FILE__, __LINE__);
+				internal_error("login already exists", __FILE__, __LINE__);
 				return false;
 			}
 		}
 		catch(Exception $e)
 		{
-			bm_error("stmtLogin : " . $e->getMessage(),
+			internal_error("stmtLogin : " . $e->getMessage(),
 						__FILE__, __LINE__);
 			return (false);
 		}
@@ -88,13 +88,13 @@ class		UserPostUtilities
 			$ret = $stmtEmail->fetchAll(PDO::FETCH_ASSOC);
 			if ($ret)
 			{
-				bm_error("email already exists", __FILE__, __LINE__);
+				internal_error("email already exists", __FILE__, __LINE__);
 				return false;
 			}
 		}
 		catch(Exception $e)
 		{
-			bm_error("stmtEmail : " . $e->getMessage(),
+			internal_error("stmtEmail : " . $e->getMessage(),
 						__FILE__, __LINE__);
 			return (false);
 		}

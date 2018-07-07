@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jun 30 12:18:27 2018                        by bmbarga      */
+/*   Updated: Sat Jul 07 08:12:24 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@
 			'moneyneeds',
 		];
 
+		public static		$error_log_file = "./logs/error.log";
+
 		//constructor
-		public function		__construct()
+		private function		__construct()
 		{
 			if (self::$verbose)
 			{
@@ -51,7 +53,7 @@
 		}
 
 		//destructor
-		public function		__destruct()
+		private function		__destruct()
 		{
 			if (self::$verbose)
 			{

@@ -12,6 +12,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+require_once('srcs/errors/HttpError.class.php');
 require_once('srcs/models/User.class.php');
 require_once('srcs/errors/error.php');
 require_once('srcs/api/Uri.class.php');
