@@ -9,16 +9,17 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 10:01:16 2018                        by bmbarga      */
+/*   Updated: Thu Jul 26 11:21:22 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
 	class		HttpError
 	{
 		public static	$errorCodes = array(
-			204 => array('204 No Content', 'No content.'),
+			200 => array('200 ok', 'OK'),
 			201 => array('201 Created', 'Created'),
-			304 => array('304 No Content', 'Not Modified.'),
+			204 => array('204 No Content', 'No content.'),
+			304 => array('304 Not Modified', 'Not Modified.'),
 			400 => array('400 Bad Request', 'The request cannot be fulfilled due to bad syntax.'),
 			403 => array('403 Forbidden', 'The server has refused to fulfil your request.'),
 			404 => array('404 Not Found', 'The page you requested was not found on this server.'),

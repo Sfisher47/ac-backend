@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 12:08:18 2018                        by bmbarga      */
+/*   Updated: Thu Jul 26 14:05:19 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@
 		}
 
 		//IRequestHandler function override
-		public function		Get($kwarg)
+		public function		Get($kwargs)
 		{
-			if (!$kwarg
-					|| !is_array($kwarg))
+			if (!$kwargs
+					|| !is_array($kwargs))
 			{
-				internal_error('kwarg not array or set to null',
+				internal_error('kwargs not array or set to null',
 								__FILE__, __LINE__);
 				return (-1);
 			}
-			$id = $kwarg['id'];
-			$db = $kwarg['db'];
+			$id = $kwargs['id'];
+			$db = $kwargs['db'];
 
 			if (!$db)
 			{
@@ -69,17 +69,17 @@
 			echo json_encode($ret); // Debug
 		}
 
-		public function		Post($kwarg)
+		public function		Post($kwargs)
 		{
-			if (!$kwarg
-					|| !is_array($kwarg))
+			if (!$kwargs
+					|| !is_array($kwargs))
 			{
-				internal_error('kwarg not array or set to null',
+				internal_error('kwargs not array or set to null',
 								__FILE__, __LINE__);
 				return (-1);
 			}
 
-			$db = $kwarg['db'];
+			$db = $kwargs['db'];
 
 			if (!$db)
 			{
@@ -175,22 +175,97 @@
 			http_error(201);
 		}
 
-		public function		Put($db)
+		public function		Patch($kwargs)
 		{
-			if (!$db)
+			if (!$kwargs
+					|| !is_array($kwargs))
 			{
-				internal_error("db set to null", __FILE__, __LINE__);
+				internal_error('kwargs not array or set to null',
+								__FILE__, __LINE__);
 				return (-1);
 			}
-		}
+			if (!isset($kwargs['id']))
+			{
+				internal_error("Wrong id", __FILE__, __LINE__);
+				http_error(400);
+				return (-1);
+			}
 
-		public function		Update($db)
-		{
+			$id = $kwargs['id'];
+			$db = $kwargs['db'];
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
+
+			if (!$GLOBALS['ac_script'])
+			{
+				$data = json_decode(file_get_contents("php://input"));
+				if (!$data)
+				{
+					internal_error("data set to null", __FILE__, __LINE__);
+					http_error(204); //No Content
+					return (-1);
+				}
+			}
+			else
+			{
+				$data = json_decode('{
+										"login" : "user1",
+										"firstname" : "Marcel",
+										"lastname" : "<h></h>"
+									}');
+			}
+			$data = UserPostUtilities::SanitizeData($data);
+
+			$query = 'UPDATE ' . $this->table
+					. ' SET '
+					.	((!property_exists($data, 'login')) ? '' : 'login = :login')
+					.	((!property_exists($data, 'firstname')) ? '' : ',firstname = :firstname')
+					.	((!property_exists($data, 'lastname')) ? '' : ',lastname = :lastname')
+					.	((!property_exists($data, 'password')) ? '' : ',password = :password')
+					.	((!property_exists($data, 'email')) ? '' : ',email = :email,')
+					.	((!property_exists($data, 'city')) ? '' : ',city = :city,')
+					.	((!property_exists($data, 'country')) ? '' : ',country = :country')
+					.	((!property_exists($data, 'bio')) ? '' : ',bio = :bio,')
+					.	((!property_exists($data, 'picture')) ? '' : ',picture = :picture')
+					.	((!property_exists($data, 'phonenumber'))
+							? '' : 'phonenumber = :phonenumber,')
+					.	((!property_exists($data, 'signupdate')) ? '' : ',signup_date = :signupdate')
+					.	((!property_exists($data, 'gender')) ? '' : ',gender = :gender')
+					. ' WHERE id=:id';
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			try
+			{
+				(!property_exists($data, 'login')) ? : $stmt->bindParam(':login', $data->login);
+				(!property_exists($data, 'firstname')) ? : $stmt->bindParam(':firstname', $data->firstname);
+				(!property_exists($data, 'lastname')) ? : $stmt->bindParam(':lastname', $data->lastname);
+				(!property_exists($data, 'password')) ? : $stmt->bindParam(':password', $data->password);
+				(!property_exists($data, 'email')) ? : $stmt->bindParam(':email', $data->email);
+				(!property_exists($data, 'city')) ? : $stmt->bindParam(':city', $data->city);
+				(!property_exists($data, 'country')) ? : $stmt->bindParam(':country', $data->country);
+				(!property_exists($data, 'bio')) ? : $stmt->bindParam(':bio', $data->bio);
+				(!property_exists($data, 'picture')) ? : $stmt->bindParam(':picture', $data->picture);
+				(!property_exists($data, 'phonenumber')) ? : $stmt->bindParam(':phonenumber', $data->phonenumber);
+				(!property_exists($data, 'signupdate')) ? : $stmt->bindParam(':signupdate', $data->signupdate);
+				(!property_exists($data, 'gender')) ? : $stmt->bindParam(':gender', $data->gender);
+				$stmt->bindParam(':id', $id);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			if (!$stmt->execute())
+			{
+				internal_error("stmt->execute : ", __FILE__, __LINE__);
+				return (-1);
+			}
+			http_error(200);
 		}
 
 		public function		Delete($db)

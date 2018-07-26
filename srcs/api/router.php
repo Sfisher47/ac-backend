@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sat Jul 07 11:20:17 2018                        by bmbarga      */
+/*   Updated: Thu Jul 26 12:06:27 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ function		IsHandledUri($uri)
 {
 	if (!$uri)
 	{
-		internal_error("uri set to null", __FILE__, __LINE__);
+		internal_error("uri set to null",
+						__FILE__, __LINE__);
 		return (false);
 	}
 
@@ -28,14 +29,16 @@ function		IsHandledUri($uri)
 		|| array_search($uri->apiVersion,
 				Config::$apiVersions) === FALSE)
 	{
-		internal_error("wrong apiVersion : $uri->apiVersion", __FILE__, __LINE__);
+		internal_error("wrong apiVersion : $uri->apiVersion",
+						__FILE__, __LINE__);
 		http_error(400, 'wrong api version');
 		return false;
 	}
 
 	if (empty($uri->apiKey))
 	{
-		internal_error("require an api key ", __FILE__, __LINE__);
+		internal_error("require an api key ",
+						__FILE__, __LINE__);
 		http_error(400, 'require an api key');
 		return false;
 	}
@@ -44,7 +47,8 @@ function		IsHandledUri($uri)
 		|| array_search($uri->endPoint,
 				Config::$endPoints) === FALSE)
 	{
-		internal_error("wrong endPoint : $uri->endPoint", __FILE__, __LINE__);
+		internal_error("wrong endPoint : $uri->endPoint",
+						__FILE__, __LINE__);
 		http_error(400, 'wrong endPoint');
 		return false;
 	}
@@ -52,7 +56,8 @@ function		IsHandledUri($uri)
 		|| array_search($uri->method,
 				Config::$methods) === FALSE)
 	{
-		internal_error("Unhandled method : $uri->method", __FILE__, __LINE__);
+		internal_error("Unhandled method : $uri->method",
+						__FILE__, __LINE__);
 		http_error(405);
 		return false;
 	}
@@ -63,7 +68,8 @@ function		IsAuthorized($uri)
 {
 	if (!$uri)
 	{
-		internal_error("uri set to null", __FILE__, __LINE__);
+		internal_error("uri set to null",
+						__FILE__, __LINE__);
 		return (false);
 	}
 
@@ -72,7 +78,8 @@ function		IsAuthorized($uri)
 	//Later we intend to load apikey from the DB
 	if ($uri->apiKey !== $_SERVER['AC_ADMIN'])
 	{
-		internal_error("wrong key : unauthorized : $uri->apiKey", __FILE__, __LINE__);
+		internal_error("wrong key : unauthorized : $uri->apiKey",
+						__FILE__, __LINE__);
 		return (false);
 	}
 	return (true);
@@ -90,20 +97,23 @@ function		HandleRequest($uri, $db)
 	$methods = [
 		'post' => 'Post',
 		'get' => 'Get',
+		'patch' => 'Patch',
 	];
 
 	if (!$GLOBALS['ac_script'])
 	{
 		if (!$uri)
 		{
-			internal_error("uri set to null", __FILE__, __LINE__);
+			internal_error("uri set to null",
+							__FILE__, __LINE__);
 			return (false);
 		}
 	}
 
 	if (!$db)
 	{
-		internal_error("db set to null", __FILE__, __LINE__);
+		internal_error("db set to null",
+						__FILE__, __LINE__);
 		return (-1);
 	}
 

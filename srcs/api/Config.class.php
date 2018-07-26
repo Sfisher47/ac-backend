@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 10:54:11 2018                        by bmbarga      */
+/*   Updated: Thu Jul 26 10:37:11 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,13 @@
 		public static		$verbose = false;
 
 		public static		$apiVersions = [
-			'v1',
-			'v2'
+			'v1'
 		];
 
 		public static		$methods = [
 			'get',
 			'post',
-// 			'put',
-// 			'update',
+			'patch',
 // 			'delete'
 		];
 
