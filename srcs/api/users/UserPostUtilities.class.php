@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Thu Jul 26 12:38:54 2018                        by bmbarga      */
+/*   Updated: Fri Jul 27 12:12:49 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class		UserPostUtilities
 		if (property_exists($data, 'city'))
 			$data->city = htmlspecialchars(strip_tags(($data->city)));
 
-		if (property_exists($data, 'countrry'))
+		if (property_exists($data, 'country'))
 			$data->country = htmlspecialchars(strip_tags(($data->country)));
 
 		if (property_exists($data, 'bio'))

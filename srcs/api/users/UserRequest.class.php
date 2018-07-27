@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Thu Jul 26 14:05:19 2018                        by bmbarga      */
+/*   Updated: Fri Jul 27 14:22:18 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,54 +215,61 @@
 				$data = json_decode('{
 										"login" : "user1",
 										"firstname" : "Marcel",
-										"lastname" : "<h></h>"
+										"lastname" : "<h></h>",
+										"password" : "password"
 									}');
 			}
 			$data = UserPostUtilities::SanitizeData($data);
 
-			$query = 'UPDATE ' . $this->table
-					. ' SET '
-					.	((!property_exists($data, 'login')) ? '' : 'login = :login')
-					.	((!property_exists($data, 'firstname')) ? '' : ',firstname = :firstname')
-					.	((!property_exists($data, 'lastname')) ? '' : ',lastname = :lastname')
-					.	((!property_exists($data, 'password')) ? '' : ',password = :password')
-					.	((!property_exists($data, 'email')) ? '' : ',email = :email,')
-					.	((!property_exists($data, 'city')) ? '' : ',city = :city,')
-					.	((!property_exists($data, 'country')) ? '' : ',country = :country')
-					.	((!property_exists($data, 'bio')) ? '' : ',bio = :bio,')
-					.	((!property_exists($data, 'picture')) ? '' : ',picture = :picture')
-					.	((!property_exists($data, 'phonenumber'))
-							? '' : 'phonenumber = :phonenumber,')
-					.	((!property_exists($data, 'signupdate')) ? '' : ',signup_date = :signupdate')
-					.	((!property_exists($data, 'gender')) ? '' : ',gender = :gender')
-					. ' WHERE id=:id';
+			$query = "UPDATE " . $this->table
+					. " SET "
+					.	((!property_exists($data, "login")) ? "" : "login = :login,")
+					.	((!property_exists($data, "firstname")) ? "" : "firstname = :firstname,")
+					.	((!property_exists($data, "lastname")) ? "" : "lastname = :lastname,")
+					.	((!property_exists($data, "password")) ? "" : "password = :password,")
+					.	((!property_exists($data, "email")) ? "" : "email = :email,")
+					.	((!property_exists($data, "city")) ? "" : "city = :city,")
+					.	((!property_exists($data, "country")) ? "" : "country = :country,")
+					.	((!property_exists($data, "bio")) ? "" : "bio = :bio,")
+					.	((!property_exists($data, "picture")) ? "" : "picture = :picture,")
+					.	((!property_exists($data, "phonenumber"))
+							? "" : "phonenumber = :phonenumber,")
+					.	((!property_exists($data, "signupdate")) ? "" : "signup_date = :signupdate,")
+					.	((!property_exists($data, "gender")) ? "" : "gender = :gender,");
+
+			//Putain c'est degueux
+			$len = strlen($query);
+			$query[$len - 1] = " ";
+			$query .= " WHERE id=:id";
+
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			try
 			{
-				(!property_exists($data, 'login')) ? : $stmt->bindParam(':login', $data->login);
-				(!property_exists($data, 'firstname')) ? : $stmt->bindParam(':firstname', $data->firstname);
-				(!property_exists($data, 'lastname')) ? : $stmt->bindParam(':lastname', $data->lastname);
-				(!property_exists($data, 'password')) ? : $stmt->bindParam(':password', $data->password);
-				(!property_exists($data, 'email')) ? : $stmt->bindParam(':email', $data->email);
-				(!property_exists($data, 'city')) ? : $stmt->bindParam(':city', $data->city);
-				(!property_exists($data, 'country')) ? : $stmt->bindParam(':country', $data->country);
-				(!property_exists($data, 'bio')) ? : $stmt->bindParam(':bio', $data->bio);
-				(!property_exists($data, 'picture')) ? : $stmt->bindParam(':picture', $data->picture);
-				(!property_exists($data, 'phonenumber')) ? : $stmt->bindParam(':phonenumber', $data->phonenumber);
-				(!property_exists($data, 'signupdate')) ? : $stmt->bindParam(':signupdate', $data->signupdate);
-				(!property_exists($data, 'gender')) ? : $stmt->bindParam(':gender', $data->gender);
-				$stmt->bindParam(':id', $id);
+				(!property_exists($data, "login")) ? : $stmt->bindParam(":login", $data->login);
+				(!property_exists($data, "firstname")) ? : $stmt->bindParam(":firstname", $data->firstname);
+				(!property_exists($data, "lastname")) ? : $stmt->bindParam(":lastname", $data->lastname);
+				(!property_exists($data, "password")) ? : $stmt->bindParam(":password", $data->password);
+				(!property_exists($data, "email")) ? : $stmt->bindParam(":email", $data->email);
+				(!property_exists($data, "city")) ? : $stmt->bindParam(":city", $data->city);
+				(!property_exists($data, "country")) ? : $stmt->bindParam(":country", $data->country);
+				(!property_exists($data, "bio")) ? : $stmt->bindParam(":bio", $data->bio);
+				(!property_exists($data, "picture")) ? : $stmt->bindParam(":picture", $data->picture);
+				(!property_exists($data, "phonenumber")) ? : $stmt->bindParam(":phonenumber", $data->phonenumber);
+				(!property_exists($data, "signupdate")) ? : $stmt->bindParam(":signupdate", $data->signupdate);
+				(!property_exists($data, "gender")) ? : $stmt->bindParam(":gender", $data->gender);
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+				if (!$stmt->execute())
+				{
+					internal_error("stmt->execute : ", __FILE__, __LINE__);
+					return (-1);
+				}
 			}
 			catch (Exception $e)
 			{
 				internal_error("stmt->bindParam : " . $e->getMessage(),
 							__FILE__, __LINE__);
-				return (-1);
-			}
-			if (!$stmt->execute())
-			{
-				internal_error("stmt->execute : ", __FILE__, __LINE__);
 				return (-1);
 			}
 			http_error(200);
