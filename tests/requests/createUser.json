@@ -1,14 +1,14 @@
 {
-	"login" : "user12",
+	"login" : "B-Tone",
 	"firstname" : "Boris",
 	"lastname" : "Mbarga",
  	"password" : "password",
-	"email" : "bmbarg@email.com",
+	"email" : "bmbarga@email.com",
 	"city" : "Yaounde",
 	"country" : "Cameroun",
 	"bio" : "Je suis con",
 	"picture" : "",
 	"phonenumber" : "092299344",
-	"signupdate" : "10",
+	"signupdate" : "",
 	"gender" : "male"
 }
