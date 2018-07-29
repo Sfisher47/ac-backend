@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Thu Jul 26 12:06:27 2018                        by bmbarga      */
+/*   Updated: Sun Jul 29 08:13:18 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,35 +59,88 @@ function		IsHandledUri($uri)
 		internal_error("Unhandled method : $uri->method",
 						__FILE__, __LINE__);
 		http_error(405);
-		return false;
-	}
-	return true;
-}
-
-function		IsAuthorized($uri)
-{
-	if (!$uri)
-	{
-		internal_error("uri set to null",
-						__FILE__, __LINE__);
-		return (false);
-	}
-
-	//for the moment the only authorization string handled
-	//is hardcoded
-	//Later we intend to load apikey from the DB
-	if ($uri->apiKey !== $_SERVER['AC_ADMIN'])
-	{
-		internal_error("wrong key : unauthorized : $uri->apiKey",
-						__FILE__, __LINE__);
 		return (false);
 	}
 	return (true);
 }
 
+function		GetTokenField($conn, $tableName, $token)
+{
+	//Check if password already exists
+	$queryToken = "SELECT token, postmethod, patchmethod, getmethod, delmethod, userid FROM $tableName WHERE token='$token'";
+	try
+	{
+		$stmtToken = $conn->prepare($queryToken);
+		$stmtToken->execute();
+		$ret = $stmtToken->fetchAll(PDO::FETCH_OBJ);
+		print_r($ret); // Debug
+		return ($ret);
+	}
+	catch(Exception $e)
+	{
+		$stmtToken->debugDumpParams();
+		internal_error("stmtToken : " . $e->getMessage(),
+					__FILE__, __LINE__);
+		return (null);
+	}
+	return (null);
+}
+
+function		GetAuthorizations($apiKey)
+{
+	if (empty($apiKey))
+		return (null);
+	$db = new Database();
+	if (!$db)
+	{
+		internal_error('DataBase set to null', __FILE__, __LINE__);
+		return (null);
+	}
+	$db->db_name = "ac_authentication";
+	if (!($conn = $db->Connect()))
+	{
+		internal_error("conn set to null", __FILE__, __LINE__);
+		return (null);
+	}
+	return (GetTokenField($conn, 'tokens', $apiKey));
+}
+
+function		IsAuthorized($uri)
+{
+	$authorizations = (object) [
+		"postmethod" => Auths::ALL,
+	];
+
+	//This case is only used for testing purposes and must never be in producttion
+	if ($uri->apiKey === $_SERVER['AC_ADMIN'])
+	{
+		return ($authorizations);
+	}
+
+	if ($uri->method === "post")
+	{
+		return ($authorizations);
+	}
+
+	if (!$uri)
+	{
+		internal_error("uri set to null",
+						__FILE__, __LINE__);
+		return (null);
+	}
+
+	if (!($authorizations = GetAuthorizations($uri->apiKey)))
+	{
+		internal_error("wrong key : unauthorized : $uri->apiKey",
+						__FILE__, __LINE__);
+		return (null);
+	}
+	return ($authorizations);
+}
+
 function CreateUserRequest() { return (new UserRequest()); };
 
-function		HandleRequest($uri, $db)
+function		HandleRequest($uri, $db, $authorizations)
 {
 
 	$create = [
@@ -106,7 +159,7 @@ function		HandleRequest($uri, $db)
 		{
 			internal_error("uri set to null",
 							__FILE__, __LINE__);
-			return (false);
+			return (-1);
 		}
 	}
 
@@ -117,13 +170,6 @@ function		HandleRequest($uri, $db)
 		return (-1);
 	}
 
-// 	UserRequest::$verbose = true;
-
-// 	print_r($create);
-
-// 	echo "uri : $uri->endPoint". PHP_EOL; // Debug
-// 	echo "echo : ${create[$uri->endPoint]}". PHP_EOL; // Debug
-
 	$elem = call_user_func("${create[$uri->endPoint]}", $db);
 	if (!$elem)
 	{
@@ -131,15 +177,11 @@ function		HandleRequest($uri, $db)
 		return (-1);
 	}
 
-	$elem->{$methods[$uri->method]}(['db' => $db, 'id' => $uri->id]);
-
-// 	echo __FUNCTION__. PHP_EOL; // Debug
+	$elem->{$methods[$uri->method]}(["db" => $db, "id" => $uri->id, "auth" => $authorizations]);
 }
 
 function		Run()
 {
-// 	print_r($_SERVER); // Debug
-
 	if (!$GLOBALS['ac_script'])
 	{
 		//Check if running plateform
@@ -153,25 +195,25 @@ function		Run()
 		//Create a new uri by saving relevant uri data
 		$uri = new Uri(strtolower($_SERVER['REQUEST_URI']),
 						strtolower($_SERVER['REQUEST_METHOD']));
-
-		//Check if the uri was properly formatted
-		if (!IsHandledUri($uri))
-		{
-			internal_error('Bad uri', __FILE__, __LINE__);
-			return (-1);
-		}
-
-		//Check authorization level
-		if (!IsAuthorized($uri))
-		{
-			internal_error('Bad uri : unauthorized', __FILE__, __LINE__);
-			http_error(403);
-			return (0);
-		}
 	}
 	else
 	{
-		$uri = new Uri("v1/admin/users/", "post");
+		$uri = new Uri("v1/admin/users", "get");
+	}
+
+	//Check if the uri was properly formatted
+	if (!IsHandledUri($uri))
+	{
+		internal_error('Bad uri', __FILE__, __LINE__);
+		return (-1);
+	}
+
+	//Check authorization level
+	if (!($authorizations = IsAuthorized($uri)))
+	{
+		internal_error('Bad uri : unauthorized', __FILE__, __LINE__);
+		http_error(403);
+		return (-1);
 	}
 
 	//Create Database
@@ -182,10 +224,9 @@ function		Run()
 		return (-1);
 	}
 
-	HandleRequest($uri, $db);
+	HandleRequest($uri, $db, $authorizations);
 }
 
 Run();
-// 	If the method is handled then call the right function method accoring
-// 	to the url parameter
+
 ?>

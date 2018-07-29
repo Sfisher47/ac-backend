@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Fri Jul 27 14:22:18 2018                        by bmbarga      */
+/*   Updated: Sun Jul 29 07:43:50 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@
 			if (!$kwargs
 					|| !is_array($kwargs))
 			{
-				internal_error('kwargs not array or set to null',
+				internal_error("kwargs not array or set to null",
 								__FILE__, __LINE__);
 				return (-1);
 			}
-			$id = $kwargs['id'];
-			$db = $kwargs['db'];
+			$id = $kwargs["id"];
+			$db = $kwargs["db"];
+			$auth = $kwargs["auth"];
 
 			if (!$db)
 			{
@@ -193,6 +194,7 @@
 
 			$id = $kwargs['id'];
 			$db = $kwargs['db'];
+			$auth = $kwargs["auth"];
 
 			if (!$db)
 			{
@@ -275,9 +277,9 @@
 			http_error(200);
 		}
 
-		public function		Delete($db)
+		public function		Delete($kwargs)
 		{
-			if (!$db)
+			if (!$kwargs)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);

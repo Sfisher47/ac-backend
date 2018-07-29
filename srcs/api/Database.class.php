@@ -16,13 +16,13 @@
 	{
 		public static		$verbose = false;
 
-		private	$host = 'localhost';
-		private	$username = 'bmbarga';
+		public	$host = 'localhost';
+		public	$username = 'bmbarga';
 
 		//the password must be hidden later on
 		//or loaded from a file
-		private	$password = 'test';
-		private	$db_name = 'actions_citoyennes';
+		public	$password = 'test';
+		public	$db_name = 'actions_citoyennes';
 		private	$conn = null;
 
 		//constructors
