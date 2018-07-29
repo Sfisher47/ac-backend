@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sun Jul 29 08:13:18 2018                        by bmbarga      */
+/*   Updated: Sun Jul 29 09:08:18 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ function		GetTokenField($conn, $tableName, $token)
 	{
 		$stmtToken = $conn->prepare($queryToken);
 		$stmtToken->execute();
-		$ret = $stmtToken->fetchAll(PDO::FETCH_OBJ);
-		print_r($ret); // Debug
-		return ($ret);
+		$ret = $stmtToken->fetchAll(PDO::FETCH_ASSOC);
+		if (count($ret) === 1 && !empty($ret[0]))
+			return ((object)$ret[0]);
 	}
 	catch(Exception $e)
 	{

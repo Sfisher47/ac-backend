@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Jul 29 07:43:50 2018                        by bmbarga      */
+/*   Updated: Sun Jul 29 08:56:12 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@
 			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 
+			if ($auth->getmethod === Auths::NONE)
+			{
+				http_error(403);
+				return (-1);
+			}
+			if ($auth->getmethod === Auths::OWN
+				&& !empty($id))
+			{
+				if ($auth->userid !== $id)
+				{
+					http_error(403);
+					return (-1);
+				}
+			}
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -67,7 +81,7 @@
 				echo '{"response" : "nothing found"}';
 				return (0);
 			}
-			echo json_encode($ret); // Debug
+			echo json_encode($ret);
 		}
 
 		public function		Post($kwargs)
@@ -196,6 +210,20 @@
 			$db = $kwargs['db'];
 			$auth = $kwargs["auth"];
 
+			if ($auth->patchmethod === Auths::NONE)
+			{
+				http_error(403);
+				return (-1);
+			}
+			if ($auth->patchmethod === Auths::OWN
+				&& !empty($id))
+			{
+				if ($auth->userid !== $id)
+				{
+					http_error(403);
+					return (-1);
+				}
+			}
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -270,6 +298,7 @@
 			}
 			catch (Exception $e)
 			{
+				$stmt->debugDumpParams(); // Debug
 				internal_error("stmt->bindParam : " . $e->getMessage(),
 							__FILE__, __LINE__);
 				return (-1);
