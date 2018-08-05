@@ -53,9 +53,6 @@ class		UserPostUtilities
 		if (property_exists($data, 'phonenumber'))
 			$data->phonenumber = htmlspecialchars(strip_tags(($data->phonenumber)));
 
-		if (property_exists($data, 'signupdate'))
-			$data->signupdate = htmlspecialchars(strip_tags(($data->signupdate)));
-
 		if (property_exists($data, 'gender'))
 			$data->gender = htmlspecialchars(strip_tags(($data->gender)));
 

@@ -125,7 +125,6 @@
 										"bio" : "Je suis con",
 										"picture" : "",
 										"phonenumber" : "092299344",
-										"signupdate" : "10",
 										"gender" : "male"
 									}');
 			}
@@ -156,7 +155,6 @@
 						bio = :bio,
 						picture = :picture,
 						phonenumber = :phonenumber,
-						signup_date = :signupdate,
 						gender = :gender;';
 
 			$conn = $db->Connect();
@@ -173,7 +171,6 @@
 				$stmt->bindParam(':bio', $data->bio);
 				$stmt->bindParam(':picture', $data->picture);
 				$stmt->bindParam(':phonenumber', $data->phonenumber);
-				$stmt->bindParam(':signupdate', $data->signupdate);
 				$stmt->bindParam(':gender', $data->gender);
 			}
 			catch (Exception $e)
@@ -264,7 +261,6 @@
 					.	((!property_exists($data, "picture")) ? "" : "picture = :picture,")
 					.	((!property_exists($data, "phonenumber"))
 							? "" : "phonenumber = :phonenumber,")
-					.	((!property_exists($data, "signupdate")) ? "" : "signup_date = :signupdate,")
 					.	((!property_exists($data, "gender")) ? "" : "gender = :gender,");
 
 			//Putain c'est degueux
@@ -286,7 +282,6 @@
 				(!property_exists($data, "bio")) ? : $stmt->bindParam(":bio", $data->bio);
 				(!property_exists($data, "picture")) ? : $stmt->bindParam(":picture", $data->picture);
 				(!property_exists($data, "phonenumber")) ? : $stmt->bindParam(":phonenumber", $data->phonenumber);
-				(!property_exists($data, "signupdate")) ? : $stmt->bindParam(":signupdate", $data->signupdate);
 				(!property_exists($data, "gender")) ? : $stmt->bindParam(":gender", $data->gender);
 				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 
