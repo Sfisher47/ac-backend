@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sun Jul 29 09:08:18 2018                        by bmbarga      */
+/*   Updated: Sun Aug 05 10:24:20 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,51 @@ function		IsHandledUri($uri)
 
 function		GetTokenField($conn, $tableName, $token)
 {
-	//Check if password already exists
-	$queryToken = "SELECT token, postmethod, patchmethod, getmethod, delmethod, userid FROM $tableName WHERE token='$token'";
+	//Check if token already property_exists
+	$queryToken = "SELECT token, userid FROM $tableName WHERE token='$token'";
 	try
 	{
 		$stmtToken = $conn->prepare($queryToken);
 		$stmtToken->execute();
 		$ret = $stmtToken->fetchAll(PDO::FETCH_ASSOC);
 		if (count($ret) === 1 && !empty($ret[0]))
-			return ((object)$ret[0]);
+			$auth = $ret[0];
 	}
 	catch(Exception $e)
 	{
 		$stmtToken->debugDumpParams();
 		internal_error("stmtToken : " . $e->getMessage(),
+					__FILE__, __LINE__);
+		return (null);
+	}
+
+	//get Authorization
+	$db = new Database();
+	if (!$db)
+	{
+		internal_error('DataBase set to null', __FILE__, __LINE__);
+		return (null);
+	}
+	if (!($conn = $db->Connect()))
+	{
+		internal_error("conn set to null", __FILE__, __LINE__);
+		return (null);
+	}
+
+	//Get authorization
+	$queryAuth = "SELECT postmethod, patchmethod, getmethod, delmethod FROM Users WHERE id='${auth['userid']}'";
+	try
+	{
+		$stmtAuth = $conn->prepare($queryAuth);
+		$stmtAuth->execute();
+		$ret = $stmtAuth->fetchAll(PDO::FETCH_ASSOC);
+		if (count($ret) === 1 && !empty($ret[0]))
+			return ((object)array_merge($auth, $ret[0]));
+	}
+	catch(Exception $e)
+	{
+		$stmtAuth->debugDumpParams();
+		internal_error("stmtAuth : " . $e->getMessage(),
 					__FILE__, __LINE__);
 		return (null);
 	}

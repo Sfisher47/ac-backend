@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Jul 29 08:56:12 2018                        by bmbarga      */
+/*   Updated: Sun Aug 05 10:19:39 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,10 @@
 				return (-1);
 			}
 			if ($auth->getmethod === Auths::OWN
-				&& !empty($id))
+				&& $auth->userid !== $id)
 			{
-				if ($auth->userid !== $id)
-				{
-					http_error(403);
-					return (-1);
-				}
+				http_error(403);
+				return (-1);
 			}
 			if (!$db)
 			{
@@ -212,14 +209,11 @@
 				http_error(403);
 				return (-1);
 			}
-			if ($auth->patchmethod === Auths::OWN
-				&& !empty($id))
+			if ($auth->getmethod === Auths::OWN
+				&& $auth->userid !== $id)
 			{
-				if ($auth->userid !== $id)
-				{
-					http_error(403);
-					return (-1);
-				}
+				http_error(403);
+				return (-1);
 			}
 			if (!$db)
 			{
