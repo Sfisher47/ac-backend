@@ -26,20 +26,20 @@ CREATE TABLE `Actions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
   `street` varchar(100) NOT NULL,
-  `address_info` varchar(100) DEFAULT NULL,
-  `postal_code` int(10) unsigned DEFAULT NULL,
+  `address_info` varchar(100)  NULL,
+  `postal_code` int(10) unsigned  NULL,
   `city` varchar(40) NOT NULL,
   `coutry` varchar(40) NOT NULL,
-  `description` varchar(400) DEFAULT NULL,
+  `description` varchar(400)  NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
-  `duration` time DEFAULT NULL,
-  `creation_date` datetime NOT NULL CURRENT_TIMESTAMP,
+  `duration` time  NULL,
+  `creation_date` datetime NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_id` (`user_id`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,15 +53,15 @@ CREATE TABLE `Extras` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
   `street` varchar(100) NOT NULL,
-  `address_info` varchar(100) DEFAULT NULL,
-  `postal_code` int(10) unsigned DEFAULT NULL,
+  `address_info` varchar(100)  NULL,
+  `postal_code` int(10) unsigned  NULL,
   `city` varchar(40) NOT NULL,
   `coutry` varchar(40) NOT NULL,
-  `description` varchar(400) DEFAULT NULL,
+  `description` varchar(400)  NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
-  `duration` time DEFAULT NULL,
-  `creation_date` datetime NOT NULL CURRENT_TIMESTAMP,
+  `duration` time  NULL,
+  `creation_date` datetime NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `action_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -69,7 +69,7 @@ CREATE TABLE `Extras` (
   KEY `fk_action_id` (`action_id`),
   CONSTRAINT `fk_action_id` FOREIGN KEY (`action_id`) REFERENCES `Actions` (`id`),
   CONSTRAINT `fk_action_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -83,8 +83,8 @@ CREATE TABLE `LaborContributions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `laborNeed_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  `action_id` int(10) unsigned DEFAULT NULL,
-  `extra_id` int(10) unsigned DEFAULT NULL,
+  `action_id` int(10) unsigned  NULL,
+  `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),
   KEY `fk_laborContributions_action_id` (`action_id`),
   KEY `fk_laborContributions_extra_id` (`extra_id`),
@@ -94,7 +94,7 @@ CREATE TABLE `LaborContributions` (
   CONSTRAINT `fk_laborContributions_action_id` FOREIGN KEY (`action_id`) REFERENCES `Actions` (`id`),
   CONSTRAINT `fk_laborContributions_extra_id` FOREIGN KEY (`extra_id`) REFERENCES `Extras` (`id`),
   CONSTRAINT `fk_laborContributions_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,17 +107,17 @@ DROP TABLE IF EXISTS `LaborNeeds`;
 CREATE TABLE `LaborNeeds` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
-  `description` varchar(400) DEFAULT NULL,
+  `description` varchar(400)  NULL,
   `required` int(10) unsigned NOT NULL,
   `collected` int(10) unsigned NOT NULL,
-  `action_id` int(10) unsigned DEFAULT NULL,
-  `extra_id` int(10) unsigned DEFAULT NULL,
+  `action_id` int(10) unsigned  NULL,
+  `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),
   KEY `fk_laborNeeds_action_id` (`action_id`),
   KEY `fk_laborNeeds_extra_id` (`extra_id`),
   CONSTRAINT `fk_laborNeeds_action_id` FOREIGN KEY (`action_id`) REFERENCES `Actions` (`id`),
   CONSTRAINT `fk_laborNeeds_extra_id` FOREIGN KEY (`extra_id`) REFERENCES `Extras` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,8 +131,8 @@ CREATE TABLE `MaterialContributions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `materialNeed_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  `action_id` int(10) unsigned DEFAULT NULL,
-  `extra_id` int(10) unsigned DEFAULT NULL,
+  `action_id` int(10) unsigned  NULL,
+  `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),
   KEY `fk_materialContributions_action_id` (`action_id`),
   KEY `fk_materialContributions_extra_id` (`extra_id`),
@@ -142,7 +142,7 @@ CREATE TABLE `MaterialContributions` (
   CONSTRAINT `fk_materialContributions_action_id` FOREIGN KEY (`action_id`) REFERENCES `Actions` (`id`),
   CONSTRAINT `fk_materialContributions_extra_id` FOREIGN KEY (`extra_id`) REFERENCES `Extras` (`id`),
   CONSTRAINT `fk_materialContributions_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,17 +155,17 @@ DROP TABLE IF EXISTS `MaterialNeeds`;
 CREATE TABLE `MaterialNeeds` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
-  `description` varchar(400) DEFAULT NULL,
+  `description` varchar(400)  NULL,
   `required` int(10) unsigned NOT NULL,
   `collected` int(10) unsigned NOT NULL,
-  `action_id` int(10) unsigned DEFAULT NULL,
-  `extra_id` int(10) unsigned DEFAULT NULL,
+  `action_id` int(10) unsigned  NULL,
+  `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),
   KEY `fk_materialNeeds_action_id` (`action_id`),
   KEY `fk_materialNeeds_extra_id` (`extra_id`),
   CONSTRAINT `fk_materialNeeds_action_id` FOREIGN KEY (`action_id`) REFERENCES `Actions` (`id`),
   CONSTRAINT `fk_materialNeeds_extra_id` FOREIGN KEY (`extra_id`) REFERENCES `Extras` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,8 +180,8 @@ CREATE TABLE `MoneyContributions` (
   `amount` int(10) unsigned NOT NULL,
   `moneyNeed_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  `action_id` int(10) unsigned DEFAULT NULL,
-  `extra_id` int(10) unsigned DEFAULT NULL,
+  `action_id` int(10) unsigned  NULL,
+  `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),
   KEY `fk_moneyContributions_action_id` (`action_id`),
   KEY `fk_moneyContributions_extra_id` (`extra_id`),
@@ -191,7 +191,7 @@ CREATE TABLE `MoneyContributions` (
   CONSTRAINT `fk_moneyContributions_extra_id` FOREIGN KEY (`extra_id`) REFERENCES `Extras` (`id`),
   CONSTRAINT `fk_moneyContributions_moneyNeeds_id` FOREIGN KEY (`moneyNeed_id`) REFERENCES `MoneyNeeds` (`id`),
   CONSTRAINT `fk_moneyContributions_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,17 +204,17 @@ DROP TABLE IF EXISTS `MoneyNeeds`;
 CREATE TABLE `MoneyNeeds` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
-  `description` varchar(400) DEFAULT NULL,
+  `description` varchar(400)  NULL,
   `required` int(10) unsigned NOT NULL,
   `collected` int(10) unsigned NOT NULL,
-  `action_id` int(10) unsigned DEFAULT NULL,
-  `extra_id` int(10) unsigned DEFAULT NULL,
+  `action_id` int(10) unsigned  NULL,
+  `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),
   KEY `fk_moneyNeeds_action_id` (`action_id`),
   KEY `fk_moneyNeeds_extra_id` (`extra_id`),
   CONSTRAINT `fk_moneyNeeds_action_id` FOREIGN KEY (`action_id`) REFERENCES `Actions` (`id`),
   CONSTRAINT `fk_moneyNeeds_extra_id` FOREIGN KEY (`extra_id`) REFERENCES `Extras` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,25 +226,25 @@ DROP TABLE IF EXISTS `Users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(40) DEFAULT NULL,
-  `lastname` varchar(40) DEFAULT NULL,
+  `firstname` varchar(40)  NULL,
+  `lastname` varchar(40)  NULL,
   `login` varchar(40) NOT NULL,
   `email` varchar(320) NOT NULL,
   `password` char(128) NOT NULL,
-  `city` varchar(40) DEFAULT NULL,
-  `country` varchar(40) DEFAULT NULL,
-  `bio` varchar(256) DEFAULT NULL,
+  `city` varchar(40)  NULL,
+  `country` varchar(40)  NULL,
+  `bio` varchar(256)  NULL,
   `picture` blob,
-  `phonenumber` varchar(40) DEFAULT NULL,
+  `phonenumber` varchar(40)  NULL,
   `gender` enum('male','female') NOT NULL,
   `postmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'none',
   `patchmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `getmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `delmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'none',
-  `signup_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `signup_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ind_id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1  CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
