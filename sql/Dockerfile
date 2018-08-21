@@ -1,0 +1,8 @@
+FROM mysql/mysql-server:latest
+WORKDIR /var/www/html
+COPY actions_citoyennes.sql .
+COPY install.sh .
+ARG MYSQL_ROOT_PASSWORD=test
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+ENV DBNAME=actions_citoyennes
+ENTRYPOINT sh install.sh ${MYSQL_ROOT_PASSWORD} ${DBNAME}
