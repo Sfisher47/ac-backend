@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jan 01 01:00:00 1970                        by elhmn        */
-/*   Updated: Sun Aug 05 10:07:39 2018                        by bmbarga      */
+/*   Updated: Sun Aug 26 11:32:40 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 	{
 		public static		$verbose = false;
 
-		public	$host = 'localhost';
-		public	$username = 'bmbarga';
+		public	$host = 'ac.cirah.com:3000';
+		public	$username = 'root';
 
 		//the password must be hidden later on
 		//or loaded from a file
@@ -46,11 +46,7 @@
 		//connect to the database
 		public function		Connect()
 		{
-// 			for Unix based system running on socket mode
-			$dsn = 'mysql:unix_socket=/Applications/MAMP/tmp/mysql/mysql.sock'.
-				';dbname=' . $this->db_name;
-// 			else
-// 				$dsn = 'mysql:host=' . $host . ';dbname=' . $dbname;
+			$dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->db_name;
 			try
 			{
 				$this->conn = new PDO($dsn, $this->username, $this->password);
@@ -64,7 +60,7 @@
 			}
 			catch (PDOException $e)
 			{
-				internal_error("Connection : $e->getMessage()", __FILE__, __LINE__);
+				internal_error("Connection : {$e->getMessage()}", __FILE__, __LINE__);
 				return (null);
 			}
 			return ($this->conn);

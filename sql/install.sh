@@ -3,6 +3,9 @@
 function setup_db()
 {
 	mysql -r -p$1 --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '$1'" &>/dev/null
+	mysql -r -p$1 --execute="UPDATE mysql.user SET host='%' WHERE user='root';
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+	FLUSH PRIVILEGES;" &>/dev/null
 	mysql -r -p$1 --execute="CREATE DATABASE $2" &>/dev/null
 	mysql -r -p$1 $2 --execute="SOURCE actions_citoyennes.sql" &>/dev/null
 	return $?

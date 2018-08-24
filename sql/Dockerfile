@@ -1,4 +1,4 @@
-FROM mysql/mysql-server:latest
+FROM mysql/mysql-server:5.7
 WORKDIR /var/www/html
 COPY actions_citoyennes.sql .
 COPY install.sh .
