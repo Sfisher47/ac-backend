@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sun Aug 05 10:24:20 2018                        by bmbarga      */
+/*   Updated: Sun Aug 26 11:46:25 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ function		GetAuthorizations($apiKey)
 		internal_error('DataBase set to null', __FILE__, __LINE__);
 		return (null);
 	}
+	$db->host = 'ac.cirah.com:4000';
 	$db->db_name = "ac_authentication";
 	if (!($conn = $db->Connect()))
 	{
@@ -229,7 +230,7 @@ function		Run()
 	}
 	else
 	{
-		$uri = new Uri("v1/admin/users", "get");
+		$uri = new Uri("v1/admin/users", "post");
 	}
 
 	//Check if the uri was properly formatted

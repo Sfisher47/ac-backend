@@ -34,7 +34,7 @@ CREATE TABLE `Actions` (
   `date` date NOT NULL,
   `time` time NOT NULL,
   `duration` time  NULL,
-  `creation_date` datetime NOT NULL,
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_id` (`user_id`),
@@ -61,7 +61,7 @@ CREATE TABLE `Extras` (
   `date` date NOT NULL,
   `time` time NOT NULL,
   `duration` time  NULL,
-  `creation_date` datetime NOT NULL,
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(10) unsigned NOT NULL,
   `action_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -241,7 +241,7 @@ CREATE TABLE `Users` (
   `patchmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `getmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `delmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'none',
-  `signup_date` datetime NOT NULL,
+  `signup_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ind_id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1  CHARSET=utf8;

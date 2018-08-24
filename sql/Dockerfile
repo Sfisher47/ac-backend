@@ -1,4 +1,16 @@
-FROM mysql/mysql-server:latest
+# ************************************************************************** #
+#                                                                            #
+#   Dockerfile                                                               #
+#                                                                            #
+#   By: elhmn <www.elhmn.com>                                                #
+#             <nleme@live.fr>                                                #
+#                                                                            #
+#   Created: Sun Aug 26 16:15:26 2018                        by elhmn        #
+#   Updated: Sun Aug 26 16:15:29 2018                        by bmbarga      #
+#                                                                            #
+# ************************************************************************** #
+
+FROM mysql/mysql-server:5.7
 WORKDIR /var/www/html
 COPY actions_citoyennes.sql .
 COPY install.sh .
