@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jan 01 01:00:00 1970                        by elhmn        */
-/*   Updated: Sun Aug 26 11:32:40 2018                        by bmbarga      */
+/*   Updated: Sun Aug 26 12:35:15 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	{
 		public static		$verbose = false;
 
-		public	$host = 'ac.cirah.com:3000';
+		public	$host = 'apidb';
 		public	$username = 'root';
 
 		//the password must be hidden later on

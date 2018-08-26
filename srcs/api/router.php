@@ -127,7 +127,7 @@ function		GetAuthorizations($apiKey)
 		internal_error('DataBase set to null', __FILE__, __LINE__);
 		return (null);
 	}
-	$db->host = 'ac.cirah.com:4000';
+	$db->host = 'authdb';
 	$db->db_name = "ac_authentication";
 	if (!($conn = $db->Connect()))
 	{
