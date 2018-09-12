@@ -27,7 +27,7 @@ function		IsHandledUri($uri)
 
 	if (empty($uri->apiVersion)
 		|| array_search($uri->apiVersion,
-				Config::$apiVersions) === FALSE)
+				Config::getInstance()->$apiVersions) === FALSE)
 	{
 		internal_error("wrong apiVersion : $uri->apiVersion",
 						__FILE__, __LINE__);
@@ -45,7 +45,7 @@ function		IsHandledUri($uri)
 
 	if (empty($uri->endPoint)
 		|| array_search($uri->endPoint,
-				Config::$endPoints) === FALSE)
+				Config::getInstance()->$endPoints) === FALSE)
 	{
 		internal_error("wrong endPoint : $uri->endPoint",
 						__FILE__, __LINE__);
@@ -54,7 +54,7 @@ function		IsHandledUri($uri)
 	}
 	if (empty($uri->method)
 		|| array_search($uri->method,
-				Config::$methods) === FALSE)
+				Config::getInstance()->$methods) === FALSE)
 	{
 		internal_error("Unhandled method : $uri->method",
 						__FILE__, __LINE__);

@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Jul 29 07:49:47 2018                        by bmbarga      */
+/*   Updated: Tue Aug 28 20:31:51 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 			'moneyneeds',
 		];
 
+		private static		$instance = null;
+
 		public static		$error_log_file = "./logs/error.log";
 
 		//constructor
@@ -48,6 +50,20 @@
 			{
 				echo __CLASS__. " constructor called !" . PHP_EOL;
 			}
+		}
+
+		public static function			getInstance()
+		{
+			if (Config::$instance === null)
+			{
+				if (!(Config::$instance = new Config()))
+				{
+					internal_error("Config::instance construction failed !",
+						__FILE__, __LINE__);
+					return (null);
+				}
+			}
+			return (Config::$instance);
 		}
 
 		//destructor
