@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sun Aug 26 11:46:25 2018                        by bmbarga      */
+/*   Updated: Sat Sep 15 18:56:24 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ function		IsHandledUri($uri)
 						__FILE__, __LINE__);
 		return (false);
 	}
-
 	if (empty($uri->apiVersion)
 		|| array_search($uri->apiVersion,
-				Config::getInstance()->$apiVersions) === FALSE)
+				Config::GetInstance()->apiVersions) === FALSE)
 	{
 		internal_error("wrong apiVersion : $uri->apiVersion",
 						__FILE__, __LINE__);
@@ -45,7 +44,7 @@ function		IsHandledUri($uri)
 
 	if (empty($uri->endPoint)
 		|| array_search($uri->endPoint,
-				Config::getInstance()->$endPoints) === FALSE)
+				Config::GetInstance()->endPoints) === FALSE)
 	{
 		internal_error("wrong endPoint : $uri->endPoint",
 						__FILE__, __LINE__);
@@ -54,7 +53,7 @@ function		IsHandledUri($uri)
 	}
 	if (empty($uri->method)
 		|| array_search($uri->method,
-				Config::getInstance()->$methods) === FALSE)
+				Config::GetInstance()->methods) === FALSE)
 	{
 		internal_error("Unhandled method : $uri->method",
 						__FILE__, __LINE__);
@@ -78,7 +77,6 @@ function		GetTokenField($conn, $tableName, $token)
 	}
 	catch(Exception $e)
 	{
-		$stmtToken->debugDumpParams();
 		internal_error("stmtToken : " . $e->getMessage(),
 					__FILE__, __LINE__);
 		return (null);
@@ -109,7 +107,6 @@ function		GetTokenField($conn, $tableName, $token)
 	}
 	catch(Exception $e)
 	{
-		$stmtAuth->debugDumpParams();
 		internal_error("stmtAuth : " . $e->getMessage(),
 					__FILE__, __LINE__);
 		return (null);
@@ -127,8 +124,8 @@ function		GetAuthorizations($apiKey)
 		internal_error('DataBase set to null', __FILE__, __LINE__);
 		return (null);
 	}
-	$db->host = 'ac.cirah.com:4000';
-	$db->db_name = "ac_authentication";
+	$db->host = Config::GetInstance()->authHost;
+	$db->dbName = Config::GetInstance()->authDBName;
 	if (!($conn = $db->Connect()))
 	{
 		internal_error("conn set to null", __FILE__, __LINE__);
@@ -144,7 +141,7 @@ function		IsAuthorized($uri)
 	];
 
 	//This case is only used for testing purposes and must never be in producttion
-	if ($uri->apiKey === $_SERVER['AC_ADMIN'])
+	if ($uri->apiKey === Config::GetInstance()->testApiKey)
 	{
 		return ($authorizations);
 	}
@@ -230,7 +227,9 @@ function		Run()
 	}
 	else
 	{
-		$uri = new Uri("v1/admin/users", "post");
+		$uri = new Uri("v1/"
+				. Config::GetInstance()->testApiKey
+				. "/users", "post");
 	}
 
 	//Check if the uri was properly formatted

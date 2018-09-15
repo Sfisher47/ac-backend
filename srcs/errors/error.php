@@ -16,7 +16,7 @@ function	internal_error($str = "", $filename = "", $line = "")
 {
 	if (!is_string($str))
 		return (-1);
-	error_log(format_error($str, $filename, $line), 3, Config::getInstance()->$error_log_file);
+	error_log(format_error($str, $filename, $line), 3, Config::GetInstance()->errorLogFileName);
 }
 
 //Send HttpError after internal error
@@ -26,7 +26,7 @@ function	http_internal_error($str = "", $filename = "",
 	http_error($code, $messageIndex);
 	if (!is_string($str))
 		return (-1);
-	error_log(format_error($str, $filename, $line), 3, Config::getInstance()->$error_log_file);
+	error_log(format_error($str, $filename, $line), 3, Config::GetInstance()->errorLogFileName);
 }
 
 function	format_error($str = "", $filename = "", $line = "")
