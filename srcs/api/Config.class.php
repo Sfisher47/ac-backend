@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Jul 29 07:49:47 2018                        by bmbarga      */
+/*   Updated: Sat Sep 15 19:06:10 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,26 @@
 	{
 		public static		$verbose = false;
 
-		public static		$apiVersions = [
+		public 		$authHost = 'localhost'; // Default
+		public 		$apiHost = 'localhost'; // Default
+		public 		$dbUserName = 'root'; // Default
+		public 		$dbPassword = 'test'; // Default
+		public 		$apiDBName = 'actions_citoyennes'; // Default
+		public 		$authDBName = 'ac_authentication'; // Default
+		public 		$testApiKey = 'test'; // Default
+
+		public 		$apiVersions = [
 			'v1'
 		];
 
-		public static		$methods = [
+		public 		$methods = [
 			'get',
 			'post',
 			'patch',
 // 			'delete'
 		];
 
-		public static		$endPoints = [
+		public 		$endPoints = [
 			'users',
 			'actions',
 			'extras',
@@ -39,7 +47,22 @@
 			'moneyneeds',
 		];
 
-		public static		$error_log_file = "./logs/error.log";
+		private static 	$instance = null;
+
+		public 			$errorLogFileName = "./logs/error.log";
+		public 			$configFileName = "./config.json";
+
+		private function		initConfigData()
+		{
+			$data = json_decode(file_get_contents($this->configFileName));
+			$this->authHost = $data->authHost;
+			$this->apiHost = $data->apiHost;
+			$this->dbUserName = $data->dbUserName;
+			$this->dbPassword = $data->dbPassword;
+			$this->apiDBName = $data->apiDBName;
+			$this->authDBName = $data->authDBName;
+			$this->testApiKey = $data->testApiKey;
+		}
 
 		//constructor
 		private function		__construct()
@@ -48,10 +71,25 @@
 			{
 				echo __CLASS__. " constructor called !" . PHP_EOL;
 			}
+			$this->initConfigData();
+		}
+
+		public static function			GetInstance()
+		{
+			if (Config::$instance === null)
+			{
+				if (!(Config::$instance = new Config()))
+				{
+					internal_error("Config::instance construction failed !",
+						__FILE__, __LINE__);
+					return (null);
+				}
+			}
+			return (Config::$instance);
 		}
 
 		//destructor
-		private function		__destruct()
+		public function		__destruct()
 		{
 			if (self::$verbose)
 			{

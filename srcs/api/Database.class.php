@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jan 01 01:00:00 1970                        by elhmn        */
-/*   Updated: Sun Aug 26 11:32:40 2018                        by bmbarga      */
+/*   Updated: Sat Sep 15 18:53:41 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 	{
 		public static		$verbose = false;
 
-		public	$host = 'ac.cirah.com:3000';
-		public	$username = 'root';
-
-		//the password must be hidden later on
-		//or loaded from a file
-		public	$password = 'test';
-		public	$db_name = 'actions_citoyennes';
 		private	$conn = null;
 
 		//constructors
@@ -46,10 +39,13 @@
 		//connect to the database
 		public function		Connect()
 		{
-			$dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->db_name;
+			$dsn = 'mysql:host=' . Config::GetInstance()->apiHost
+				. ';dbname=' . Config::GetInstance()->apiDBName;
 			try
 			{
-				$this->conn = new PDO($dsn, $this->username, $this->password);
+				$this->conn = new PDO($dsn,
+								Config::GetInstance()->dbUserName,
+								Config::GetInstance()->dbPassword);
 				if (!$this->conn)
 				{
 					internal_error("this->conn set to null", __FILE__, __LINE__);

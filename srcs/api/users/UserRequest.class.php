@@ -287,7 +287,6 @@
 			}
 			catch (Exception $e)
 			{
-				$stmt->debugDumpParams(); // Debug
 				internal_error("stmt->bindParam : " . $e->getMessage(),
 							__FILE__, __LINE__);
 				return (-1);
