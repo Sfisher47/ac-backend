@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sat Sep 15 18:56:24 2018                        by elhmn        */
+/*   Updated: Sat Sep 15 23:25:17 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ function		IsAuthorized($uri)
 {
 	$authorizations = (object) [
 		"postmethod" => Auths::ALL,
+		"getmethod" => Auths::ALL,
+		"patchmethod" => Auths::ALL,
 	];
 
 	//This case is only used for testing purposes and must never be in producttion
@@ -229,7 +231,7 @@ function		Run()
 	{
 		$uri = new Uri("v1/"
 				. Config::GetInstance()->testApiKey
-				. "/users", "post");
+				. "/users", "get");
 	}
 
 	//Check if the uri was properly formatted

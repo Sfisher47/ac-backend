@@ -15,20 +15,27 @@
 	class	Database
 	{
 		public static		$verbose = false;
-
+		public	$host = null;
+		public	$dbName = null;
 		private	$conn = null;
 
+		public function		Init()
+		{
+			$this->host = Config::GetInstance()->apiHost;
+			$this->dbName = Config::GetInstance()->apiDBName;
+		}
 		//constructors
-		public function		__constructor()
+		public function		__construct()
 		{
 			if (self::$verbose)
 			{
 				echo __CLASS__. " constructor called !" . PHP_EOL;
 			}
+			$this->Init();
 		}
 
 		//destructor
-		public function		__destructor()
+		public function		__destruct()
 		{
 			if (self::$verbose)
 			{
@@ -39,8 +46,7 @@
 		//connect to the database
 		public function		Connect()
 		{
-			$dsn = 'mysql:host=' . Config::GetInstance()->apiHost
-				. ';dbname=' . Config::GetInstance()->apiDBName;
+			$dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName;
 			try
 			{
 				$this->conn = new PDO($dsn,
