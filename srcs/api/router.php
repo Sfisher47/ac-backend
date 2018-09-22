@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sat Sep 15 23:25:17 2018                        by elhmn        */
+/*   Updated: Sat Sep 22 14:52:57 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,13 +169,11 @@ function		IsAuthorized($uri)
 	return ($authorizations);
 }
 
-function CreateUserRequest() { return (new UserRequest()); };
-
 function		HandleRequest($uri, $db, $authorizations)
 {
 
 	$create = [
-		'users' => 'CreateUserRequest',
+		'users' => 'UserRequest',
 	];
 
 	$methods = [
@@ -201,7 +199,7 @@ function		HandleRequest($uri, $db, $authorizations)
 		return (-1);
 	}
 
-	$elem = call_user_func("${create[$uri->endPoint]}", $db);
+	$elem = new $create[$uri->endPoint]($db);
 	if (!$elem)
 	{
 		internal_error("", __FILE__, __LINE__);
