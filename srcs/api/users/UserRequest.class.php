@@ -126,18 +126,20 @@
 									}');
 			}
 			$data = UserPostUtilities::SanitizeData($data);
-
-			//check credentials
-			if (empty($data->password))
+			
+			if (isset($data->password))
 			{
-				http_error(400, "Empty password");
-				return (-1);
+				//check credentials
+				if (empty($data->password))
+				{
+					http_error(400, "Empty password");
+					return (-1);
+				}
+			
+				//hash the user password
+				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
 			}
-			else
-			{
-				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);					
-			}
-
+			
 			//Check if email is well formatted
 			if (!UserPostUtilities::IsEmailValid($data->email))
 			{
@@ -261,10 +263,9 @@
 					http_error(400, "Empty password");
 					return (-1);
 				}
-				else
-				{
-					$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);					
-				}
+			
+				//hash the user password
+				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
 			}
 
 			//Check if email is well formatted
