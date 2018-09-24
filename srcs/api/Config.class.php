@@ -32,7 +32,7 @@
 			'get',
 			'post',
 			'patch',
-// 			'delete'
+ 			'delete'
 		];
 
 		public 		$endPoints = [
