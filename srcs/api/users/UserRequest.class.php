@@ -134,6 +134,13 @@
 				return (-1);
 			}
 
+			//Check if email is well formatted
+			if (!UserPostUtilities::IsEmailValid($data->email))
+			{
+				http_error(400, "Invalid Email Address");
+				return (-1);
+			}
+
 			if (!UserPostUtilities::CanBePosted($data, $db, $this->table))
 			{
 				http_error(409); //Resource exists
