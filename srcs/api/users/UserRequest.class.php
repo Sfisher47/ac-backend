@@ -249,6 +249,13 @@
 			}
 			$data = UserPostUtilities::SanitizeData($data);
 
+			//Check if email is well formatted
+			if (isset($data->email) && !UserPostUtilities::IsEmailValid($data->email))
+			{
+				http_error(400, "Invalid Email Address");
+				return (-1);
+			}
+
 			$query = "UPDATE " . $this->table
 					. " SET "
 					.	((!property_exists($data, "login")) ? "" : "login = :login,")
