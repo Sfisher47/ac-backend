@@ -133,6 +133,10 @@
 				http_error(400, "Empty password");
 				return (-1);
 			}
+			else
+			{
+				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);					
+			}
 
 			//Check if email is well formatted
 			if (!UserPostUtilities::IsEmailValid($data->email))
@@ -165,7 +169,6 @@
 			$stmt = $conn->prepare($query);
 			try
 			{
-				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
 				$stmt->bindParam(':login', $data->login);
 				$stmt->bindParam(':firstname', $data->firstname);
 				$stmt->bindParam(':lastname', $data->lastname);
@@ -249,6 +252,20 @@
 									}');
 			}
 			$data = UserPostUtilities::SanitizeData($data);
+			
+			if (isset($data->password))
+			{
+				//check credentials
+				if (empty($data->password))
+				{
+					http_error(400, "Empty password");
+					return (-1);
+				}
+				else
+				{
+					$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);					
+				}
+			}
 
 			//Check if email is well formatted
 			if (isset($data->email) && !UserPostUtilities::IsEmailValid($data->email))
@@ -280,10 +297,7 @@
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			try
-			{
-				if (isset($data->password)) 
-					$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
-				
+			{				
 				(!property_exists($data, "login")) ? : $stmt->bindParam(":login", $data->login);
 				(!property_exists($data, "firstname")) ? : $stmt->bindParam(":firstname", $data->firstname);
 				(!property_exists($data, "lastname")) ? : $stmt->bindParam(":lastname", $data->lastname);
