@@ -77,6 +77,7 @@ class		UserPostUtilities
 			internal_error("conn set to null", __FILE__, __LINE__);
 			return (false);
 		}
+		
 		//Check if login already exists
 		$queryLogin = "SELECT login FROM $tableName WHERE login=:login";
 		try
@@ -119,6 +120,11 @@ class		UserPostUtilities
 			return (false);
 		}
 		return (true);
+	}
+	
+	public static function	IsEmailValid($email)
+	{ 
+		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
 };
