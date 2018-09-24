@@ -165,6 +165,7 @@
 			$stmt = $conn->prepare($query);
 			try
 			{
+				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
 				$stmt->bindParam(':login', $data->login);
 				$stmt->bindParam(':firstname', $data->firstname);
 				$stmt->bindParam(':lastname', $data->lastname);
@@ -280,6 +281,9 @@
 			$stmt = $conn->prepare($query);
 			try
 			{
+				if (isset($data->password)) 
+					$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
+				
 				(!property_exists($data, "login")) ? : $stmt->bindParam(":login", $data->login);
 				(!property_exists($data, "firstname")) ? : $stmt->bindParam(":firstname", $data->firstname);
 				(!property_exists($data, "lastname")) ? : $stmt->bindParam(":lastname", $data->lastname);
