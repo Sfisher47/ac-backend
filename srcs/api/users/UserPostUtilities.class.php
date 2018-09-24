@@ -79,45 +79,51 @@ class		UserPostUtilities
 		}
 		
 		//Check if login already exists
-		$queryLogin = "SELECT login FROM $tableName WHERE login=:login";
-		try
+		if (isset($data->login))
 		{
-			$stmtLogin = $conn->prepare($queryLogin);
-			$stmtLogin->bindParam(':login', $data->login);
-			$stmtLogin->execute();
-			$ret = $stmtLogin->fetchAll(PDO::FETCH_ASSOC);
-			if ($ret)
+			$queryLogin = "SELECT login FROM $tableName WHERE login=:login";
+			try
 			{
-				internal_error("login already exists", __FILE__, __LINE__);
-				return false;
+				$stmtLogin = $conn->prepare($queryLogin);
+				$stmtLogin->bindParam(':login', $data->login);
+				$stmtLogin->execute();
+				$ret = $stmtLogin->fetchAll(PDO::FETCH_ASSOC);
+				if ($ret)
+				{
+					internal_error("login already exists", __FILE__, __LINE__);
+					return false;
+				}
 			}
-		}
-		catch(Exception $e)
-		{
-			internal_error("stmtLogin : " . $e->getMessage(),
-						__FILE__, __LINE__);
-			return (false);
+			catch(Exception $e)
+			{
+				internal_error("stmtLogin : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (false);
+			}
 		}
 
 		//Check if email already exists
-		$queryEmail = "SELECT email FROM $tableName WHERE email=:email";
-		try
+		if(isset($data->email))
 		{
-			$stmtEmail = $conn->prepare($queryEmail);
-			$stmtEmail->bindParam(':email', $data->email);
-			$stmtEmail->execute();
-			$ret = $stmtEmail->fetchAll(PDO::FETCH_ASSOC);
-			if ($ret)
+			$queryEmail = "SELECT email FROM $tableName WHERE email=:email";
+			try
 			{
-				internal_error("email already exists", __FILE__, __LINE__);
-				return false;
+				$stmtEmail = $conn->prepare($queryEmail);
+				$stmtEmail->bindParam(':email', $data->email);
+				$stmtEmail->execute();
+				$ret = $stmtEmail->fetchAll(PDO::FETCH_ASSOC);
+				if ($ret)
+				{
+					internal_error("email already exists", __FILE__, __LINE__);
+					return false;
+				}
 			}
-		}
-		catch(Exception $e)
-		{
-			internal_error("stmtEmail : " . $e->getMessage(),
-						__FILE__, __LINE__);
-			return (false);
+			catch(Exception $e)
+			{
+				internal_error("stmtEmail : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (false);
+			}
 		}
 		return (true);
 	}
