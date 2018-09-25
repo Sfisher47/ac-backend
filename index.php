@@ -12,6 +12,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+define('__API_DIR__', dirname(__FILE__) . '/srcs/api');
+
 require_once('srcs/errors/HttpError.class.php');
 require_once('srcs/errors/error.php');
 require_once('srcs/api/Uri.class.php');
