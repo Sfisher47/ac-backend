@@ -12,8 +12,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-	require_once __API_DIR__ . '/actions/Action.class.php';
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
+	require_once __API_DIR__ . '/actions/ActionRequestUtilities.class.php';
 
 	class		ActionRequest implements IRequestHandler
 	{
@@ -50,26 +50,29 @@
 			}
 			$id = $kwargs["id"];
 			$auth = $kwargs["auth"];
-
+			
+			/*
 			if ($auth->getmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
 			}
+			
 			if ($auth->getmethod === Auths::OWN
 				&& $auth->userid !== $id)
 			{
 				http_error(403);
 				return (-1);
 			}
+			*/
 			
 			// Get one or all actions
 			$query = (!$id) ? 'SELECT * FROM ' . $this->table
 						        : 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
 			
 			$db = new Database();
-			$pdo = $db->Connect();
-			$stmt = $pdo->prepare($query);
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
 			
 			$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 			$stmt->execute();
@@ -95,13 +98,15 @@
 			}
 			
 			$auth = $kwargs["auth"];
-
+			
+			/*
 			if ($auth->postmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
 			}
-
+			*/
+			
 			if (!$GLOBALS['ac_script'])
 			{
 				$data = json_decode(file_get_contents("php://input"));
@@ -113,7 +118,60 @@
 				}
 			}
 			
-			// Put create action here
+			ActionRequestUtilities::SanitizeData($data);
+			
+			// Create action
+			
+			$query = 'INSERT INTO ' . $this->table . ' SET
+			title = :title,
+			street = :street,
+			address_info = :addressInfo,
+			postal_code = :codePostal,
+			city = :city,
+			coutry = :country,
+			description = :description,
+			date = :date,
+			time = :time,
+			duration = :duration,
+			user_id = :userId;';
+			
+			$db = new Database();
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(':title', $data->title);
+				$stmt->bindParam(':street', $data->street);
+				$stmt->bindParam(':addressInfo', $data->addressInfo);
+				$stmt->bindParam(':codePostal', $data->codePostal);
+				$stmt->bindParam(':city', $data->city);
+				$stmt->bindParam(':country', $data->country);
+				$stmt->bindParam(':description', $data->description);
+				$stmt->bindParam(':date', $data->date);
+				$stmt->bindParam(':time', $data->time);
+				$stmt->bindParam(':duration', $data->duration);
+				$stmt->bindParam(':userId', $data->userId);
+				
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
 			
 			http_error(201);
 		}
@@ -136,18 +194,21 @@
 
 			$id = $kwargs['id'];
 			$auth = $kwargs["auth"];
-
+			
+			/*
 			if ($auth->patchmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
 			}
-			/*if ($auth->patchmethod === Auths::OWN
+			
+			if ($auth->patchmethod === Auths::OWN
 				&& $auth->userid !== $id)
 			{
 				http_error(403);
 				return (-1);
-			}*/
+			}
+			*/
 
 			if (!$GLOBALS['ac_script'])
 			{
@@ -181,18 +242,21 @@
 
 			$id = $kwargs['id'];
 			$auth = $kwargs["auth"];
-
+			
+			/*
 			if ($auth->delmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
 			}
-			/*if ($auth->delmethod === Auths::OWN
+			
+			if ($auth->delmethod === Auths::OWN
 				&& $auth->userid !== $id)
 			{
 				http_error(403);
 				return (-1);
-			}*/
+			}
+			*/
 			
 			// Put delete action here
 			
