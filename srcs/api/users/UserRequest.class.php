@@ -275,6 +275,13 @@
 				return (-1);
 			}
 
+			//Check if email is already exists and if login already exists
+			if (!UserPostUtilities::CanBePosted($data, $db, $this->table))
+			{
+				http_error(409); //Resource exists
+				return (-1);
+			}
+
 			$query = "UPDATE " . $this->table
 					. " SET "
 					.	((!property_exists($data, "login")) ? "" : "login = :login,")
