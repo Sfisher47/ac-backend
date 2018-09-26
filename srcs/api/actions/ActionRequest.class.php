@@ -17,6 +17,7 @@
 
 	class		ActionRequest implements IRequestHandler
 	{
+		private			$table = "Actions";
 		public static	$verbose = false;
 
 // 		contructor
@@ -62,6 +63,25 @@
 				return (-1);
 			}
 			
+			// Get one or all actions
+			$query = (!$id) ? 'SELECT * FROM ' . $this->table
+						        : 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+			
+			$db = new Database();
+			$pdo = $db->Connect();
+			$stmt = $pdo->prepare($query);
+			
+			$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
+
+			echo json_encode($ret);
 		}
 
 		public function		Post($kwargs)
