@@ -12,6 +12,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// Import
+require_once __API_DIR__ . '/actions/ActionRequest.class.php';
+
 //plateform toggler
 $ac_script = isset($_SERVER['AC_SCRIPT']);
 
@@ -175,6 +178,7 @@ function		HandleRequest($uri, $db, $authorizations)
 
 	$create = [
 		'users' => 'UserRequest',
+		'actions' => 'ActionRequest',
 	];
 
 	$methods = [
