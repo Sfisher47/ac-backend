@@ -49,6 +49,7 @@
 				return (-1);
 			}
 			$id = $kwargs["id"];
+			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 			
 			/*
@@ -66,15 +67,19 @@
 			}
 			*/
 			
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+			
 			// Get one or all actions
 			$query = (!$id) ? 'SELECT * FROM ' . $this->table
-						        : 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+						        : "SELECT * FROM " . $this->table . " WHERE id = $id";
 			
-			$db = new Database();
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			
-			$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 			$stmt->execute();
 			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
@@ -97,6 +102,7 @@
 				return (-1);
 			}
 			
+			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 			
 			/*
@@ -106,6 +112,12 @@
 				return (-1);
 			}
 			*/
+			
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
 			
 			if (!$GLOBALS['ac_script'])
 			{
@@ -135,7 +147,6 @@
 			duration = :duration,
 			user_id = :userId;';
 			
-			$db = new Database();
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			
@@ -192,6 +203,7 @@
 			}
 
 			$id = $kwargs['id'];
+			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 			
 			/*
@@ -208,6 +220,12 @@
 				return (-1);
 			}
 			*/
+			
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
 
 			if (!$GLOBALS['ac_script'])
 			{
@@ -238,7 +256,6 @@
 			. 'id = id'
 			. ' WHERE id = :id';			
 			
-			$db = new Database();
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			
@@ -292,6 +309,7 @@
 			}
 
 			$id = $kwargs['id'];
+			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 			
 			/*
@@ -309,7 +327,40 @@
 			}
 			*/
 			
-			// Put delete action here
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+			
+			// Delete action
+			
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
 			
 			http_error(200);
 			
