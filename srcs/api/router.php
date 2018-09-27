@@ -143,6 +143,7 @@ function		IsAuthorized($uri)
 		"postmethod" => Auths::ALL,
 		"getmethod" => Auths::ALL,
 		"patchmethod" => Auths::ALL,
+		"delmethod" => Auths::ALL,
 	];
 
 	//This case is only used for testing purposes and must never be in producttion
@@ -184,6 +185,7 @@ function		HandleRequest($uri, $db, $authorizations)
 		'post' => 'Post',
 		'get' => 'Get',
 		'patch' => 'Patch',
+		'delete' => 'Delete',
 	];
 
 	if (!$GLOBALS['ac_script'])
