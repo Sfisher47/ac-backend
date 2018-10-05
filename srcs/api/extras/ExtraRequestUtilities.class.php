@@ -13,7 +13,7 @@
 /* ************************************************************************** */
 
 
-class		ActionRequestUtilities
+class		ExtraRequestUtilities
 {
 	public static function		SanitizeData($data)
 	{
@@ -34,21 +34,25 @@ class		ActionRequestUtilities
 		$data->date = (isset($data->date)) ? htmlspecialchars(strip_tags(trim($data->date))) : null ;
 		$data->time = (isset($data->time)) ? htmlspecialchars(strip_tags(trim($data->time))) : null ;
 		$data->duration = (isset($data->duration)) ? htmlspecialchars(strip_tags(trim($data->duration))) : null ;
+		$data->action_id = (isset($data->action_id)) ? intval(htmlspecialchars(strip_tags(trim($data->action_id)))) : null ;
 		$data->user_id = (isset($data->user_id)) ? intval(htmlspecialchars(strip_tags(trim($data->user_id)))) : null ;
 
 		return ($data);
 	}
-		
-	public static function IsOwn($db, $id, $userId)
-	{
-
+	
+	public static function		IsOwn($db, $id, $userId)
+	{	
+			
 		if (!$db)
 		{
 			internal_error("db set to null", __FILE__, __LINE__);
 			return (false);
 		}
 
-		$query = "SELECT * FROM Actions WHERE id = :id AND user_id = :userId";
+		$query = "SELECT * "
+		."FROM Extras "
+		."WHERE id = :id AND user_id = :userId";
+		
 		$conn = $db->Connect();
 		$stmt = $conn->prepare($query);
 
@@ -80,7 +84,6 @@ class		ActionRequestUtilities
 		}
 
 		return (true);
-
 	}
 
 };
