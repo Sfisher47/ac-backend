@@ -48,7 +48,7 @@ class		ActionRequestUtilities
 			return (false);
 		}
 
-		$query = "SELECT * FROM actions WHERE id = :id AND user_id = :userId";
+		$query = "SELECT * FROM Actions WHERE id = :id AND user_id = :userId";
 		$conn = $db->Connect();
 		$stmt = $conn->prepare($query);
 
