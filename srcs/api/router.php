@@ -151,12 +151,7 @@ function		IsAuthorized($uri)
 	{
 		return ($authorizations);
 	}
-
-	if ($uri->method === "post")
-	{
-		return ($authorizations);
-	}
-
+	
 	if (!$uri)
 	{
 		internal_error("uri set to null",
