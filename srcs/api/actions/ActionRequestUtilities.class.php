@@ -38,6 +38,50 @@ class		ActionRequestUtilities
 
 		return ($data);
 	}
+		
+	public static function IsOwn($db, $id, $userId)
+	{
+
+		if (!$db)
+		{
+			internal_error("db set to null", __FILE__, __LINE__);
+			return (false);
+		}
+
+		$query = "SELECT * FROM Actions WHERE id = :id AND user_id = :userId";
+		$conn = $db->Connect();
+		$stmt = $conn->prepare($query);
+
+		try
+		{
+			$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+			$stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+		}
+		catch(Exception $e)
+		{
+			internal_error("stmt->bindParam : " . $e->getMessage(), __FILE__, __LINE__);
+			return (false);				
+		}
+
+		try
+		{
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if( count($ret) === 0 )
+			{
+				return false;
+			}
+		}
+		catch(Exception $e)
+		{
+			internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+			return (false);				
+		}
+
+		return (true);
+
+	}
 
 };
 

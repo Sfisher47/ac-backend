@@ -50,22 +50,13 @@
 			}
 			$id = $kwargs["id"];
 			$db = $kwargs["db"];
-			$auth = $kwargs["auth"];
+			$auth = $kwargs["auth"];			
 			
-			/*
 			if ($auth->getmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
-			}
-			
-			if ($auth->getmethod === Auths::OWN
-				&& $auth->userid !== $id)
-			{
-				http_error(403);
-				return (-1);
-			}
-			*/
+			}			
 			
 			if (!$db)
 			{
@@ -74,7 +65,7 @@
 			}
 			
 			// Get one or all actions
-			$query = (!$id) ? 'SELECT * FROM ' . $this->table
+			$query = (!$id) ? 'SELECT * FROM ' . $this->table . " WHERE user_id = $auth->userid"
 						        : "SELECT * FROM " . $this->table . " WHERE id = $id";
 			
 			$conn = $db->Connect();
@@ -103,15 +94,13 @@
 			}
 			
 			$db = $kwargs["db"];
-			$auth = $kwargs["auth"];
+			$auth = $kwargs["auth"];			
 			
-			/*
 			if ($auth->postmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
 			}
-			*/
 			
 			if (!$db)
 			{
@@ -162,7 +151,7 @@
 				$stmt->bindParam(':date', $data->date);
 				$stmt->bindParam(':time', $data->time);
 				$stmt->bindParam(':duration', $data->duration);
-				$stmt->bindParam(':userId', $data->user_id);
+				$stmt->bindParam(':userId', $auth->userid);
 				
 			}
 			catch (Exception $e)
@@ -206,7 +195,6 @@
 			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 			
-			/*
 			if ($auth->patchmethod === Auths::NONE)
 			{
 				http_error(403);
@@ -214,12 +202,11 @@
 			}
 			
 			if ($auth->patchmethod === Auths::OWN
-				&& $auth->userid !== $id)
+				&& !ActionRequestUtilities::IsOwn($db, $id, $auth->userid))
 			{
 				http_error(403);
 				return (-1);
 			}
-			*/
 			
 			if (!$db)
 			{
@@ -312,7 +299,7 @@
 			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
 			
-			/*
+			
 			if ($auth->delmethod === Auths::NONE)
 			{
 				http_error(403);
@@ -320,12 +307,12 @@
 			}
 			
 			if ($auth->delmethod === Auths::OWN
-				&& $auth->userid !== $id)
+				&& !ActionRequestUtilities::IsOwn($db, $id, $auth->userid))
 			{
 				http_error(403);
 				return (-1);
 			}
-			*/
+			
 			
 			if (!$db)
 			{
