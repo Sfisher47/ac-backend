@@ -109,7 +109,62 @@
 			}
 			
 			// Create action
-			// TO DO
+			
+			ExtraRequestUtilities::SanitizeData($data);
+			
+			// Create action
+			
+			$query = 'INSERT INTO ' . $this->table . ' SET
+			title = :title,
+			street = :street,
+			address_info = :addressInfo,
+			postal_code = :codePostal,
+			city = :city,
+			coutry = :country,
+			description = :description,
+			date = :date,
+			time = :time,
+			duration = :duration,
+			user_id = :userId,
+			action_id = :actionId';
+			
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(':title', $data->title);
+				$stmt->bindParam(':street', $data->street);
+				$stmt->bindParam(':addressInfo', $data->address_info);
+				$stmt->bindParam(':codePostal', $data->postal_code);
+				$stmt->bindParam(':city', $data->city);
+				$stmt->bindParam(':country', $data->country);
+				$stmt->bindParam(':description', $data->description);
+				$stmt->bindParam(':date', $data->date);
+				$stmt->bindParam(':time', $data->time);
+				$stmt->bindParam(':duration', $data->duration);
+				$stmt->bindParam(':actionId', $data->action_id);
+				$stmt->bindParam(':userId', $auth->userid);
+				
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
 			
 			http_error(201);
 		}
