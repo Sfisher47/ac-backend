@@ -13,7 +13,7 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
-	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
+	require_once __API_DIR__ . '/laborneeds/LaborNeedRequestUtilities.class.php';
 
 	class		LaborNeedRequest implements IRequestHandler
 	{
@@ -164,8 +164,49 @@
 				}
 			}
 			
-			// Put update action here
-			// TO DO
+			// Put update laborneed here
+			
+			LaborNeedRequestUtilities::SanitizeData($data);
+			
+			$query = 'UPDATE ' . $this->table . ' SET '
+			. ((isset($data->title)) ? 'title = :title,' : '')
+			. ((isset($data->description)) ? 'description = :description,' : '')
+			. ((isset($data->required)) ? 'required = :required,' : '')
+			. ((isset($data->collected)) ? 'collected = :collected,' : '')
+			. ((isset($data->action_id)) ? 'action_id = :actionId,' : '')
+			. ((isset($data->extra_id)) ? 'extra_id = :extraId,' : '')
+			. 'id = id'
+			. ' WHERE id = :id';			
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+				(isset($data->title)) ? $stmt->bindParam(':title', $data->title) : false;
+				(isset($data->required)) ? $stmt->bindParam(':required', $data->required) : false;
+				(isset($data->collected)) ? $stmt->bindParam(':collected', $data->collected) : false;
+				(isset($data->action_id)) ? $stmt->bindParam(':actionId', $data->action_id) : false;
+				(isset($data->extra_id)) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
 			
 			http_error(200);
 		}
