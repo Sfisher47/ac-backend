@@ -13,7 +13,7 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
-	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
+	require_once __API_DIR__ . '/laborneeds/LaborNeedRequestUtilities.class.php';
 
 	class		LaborNeedRequest implements IRequestHandler
 	{
