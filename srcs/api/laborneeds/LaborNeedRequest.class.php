@@ -13,7 +13,7 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
-	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
+	require_once __API_DIR__ . '/laborneeds/LaborNeedRequestUtilities.class.php';
 
 	class		LaborNeedRequest implements IRequestHandler
 	{
@@ -66,7 +66,7 @@
 				return (-1);
 			}
 			
-			// Get one or all actions
+			// Get one or all laborneeds
 			// TO DO
 
 			echo json_encode($ret);
@@ -108,7 +108,7 @@
 				}
 			}
 			
-			// Create action
+			// Create laborneed
 			// TO DO
 			
 			http_error(201);
@@ -164,7 +164,7 @@
 				}
 			}
 			
-			// Put update action here
+			// Put update laborneed here
 			// TO DO
 			
 			http_error(200);
@@ -207,7 +207,7 @@
 				return (-1);
 			}
 			
-			// Delete action
+			// Delete laborneed
 			// TO DO
 			
 			http_error(200);

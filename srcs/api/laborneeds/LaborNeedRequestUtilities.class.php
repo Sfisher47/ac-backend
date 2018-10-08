@@ -29,7 +29,7 @@ class		LaborNeedRequestUtilities
 		$data->required = (isset($data->required)) ? intval(htmlspecialchars(strip_tags(trim($data->required)))) : null ;
 		$data->collected = (isset($data->collected)) ? intval(htmlspecialchars(strip_tags(trim($data->collected)))) : null ;
 		$data->action_id = (isset($data->action_id)) ? intval(htmlspecialchars(strip_tags(trim($data->action_id)))) : null ;
-		$data->extras_id = (isset($data->extras_id)) ? intval(htmlspecialchars(strip_tags(trim($data->extras_id)))) : null ;
+		$data->extra_id = (isset($data->extra_id)) ? intval(htmlspecialchars(strip_tags(trim($data->extra_id)))) : null ;
 
 		return ($data);
 	}
@@ -46,7 +46,7 @@ class		LaborNeedRequestUtilities
 		$query = "SELECT * "
 		."FROM LaborNeeds l "
 		."LEFT JOIN Actions a ON l.action_id = a.id "
-		."WHERE id = :id AND user_id = :userId";
+		."WHERE l.id = :id AND user_id = :userId";
 		
 		$conn = $db->Connect();
 		$stmt = $conn->prepare($query);
