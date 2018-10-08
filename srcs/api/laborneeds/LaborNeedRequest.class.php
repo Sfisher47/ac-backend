@@ -122,7 +122,47 @@
 			}
 			
 			// Create action
-			// TO DO
+			
+			LaborNeedRequestUtilities::SanitizeData($data);
+			
+			$query = 'INSERT INTO ' . $this->table . ' SET
+			title = :title,
+			description = :description,
+			required = :required,
+			collected = :collected,
+			action_id = :actionId,
+			extra_id = :extraId;';
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(':title', $data->title);
+				$stmt->bindParam(':description', $data->description);
+				$stmt->bindParam(':required', $data->required);
+				$stmt->bindParam(':collected', $data->collected);
+				$stmt->bindParam(':actionId', $data->action_id);
+				$stmt->bindParam(':extraId', $data->extra_id);
+				
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
 			
 			http_error(201);
 		}
