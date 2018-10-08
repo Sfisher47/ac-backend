@@ -46,7 +46,7 @@ class		LaborNeedRequestUtilities
 		$query = "SELECT * "
 		."FROM LaborNeeds l "
 		."LEFT JOIN Actions a ON l.action_id = a.id "
-		."WHERE id = :id AND user_id = :userId";
+		."WHERE l.id = :id AND user_id = :userId";
 		
 		$conn = $db->Connect();
 		$stmt = $conn->prepare($query);

@@ -185,6 +185,7 @@
 			{
 				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 				(isset($data->title)) ? $stmt->bindParam(':title', $data->title) : false;
+				(isset($data->description)) ? $stmt->bindParam(':description', $data->description) : false;
 				(isset($data->required)) ? $stmt->bindParam(':required', $data->required) : false;
 				(isset($data->collected)) ? $stmt->bindParam(':collected', $data->collected) : false;
 				(isset($data->action_id)) ? $stmt->bindParam(':actionId', $data->action_id) : false;
