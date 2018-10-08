@@ -165,7 +165,11 @@
 						bio = :bio,
 						picture = :picture,
 						phonenumber = :phonenumber,
-						gender = :gender;';
+						gender = :gender,
+						postmethod = "own",
+						patchmethod = "own",
+						getmethod = "own",
+						delmethod = "own";';
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
