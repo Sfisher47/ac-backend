@@ -66,8 +66,22 @@
 				return (-1);
 			}
 			
-			// Get one or all actions
-			// TO DO
+			// Get one or all extras
+			
+			$query = (!$id) ? 'SELECT * FROM ' . $this->table . " WHERE user_id = $auth->userid"
+						        : "SELECT * FROM " . $this->table . " WHERE id = $id";
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
 
 			echo json_encode($ret);
 		}
