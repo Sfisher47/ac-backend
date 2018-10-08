@@ -333,7 +333,10 @@
 			}
 			http_error(200);
 		}
-
+		
+		/* 		
+		// The API cant allow the delete any user from users request
+		 
 		public function		Delete($kwargs)
 		{
 			if (!$kwargs)
@@ -357,12 +360,12 @@
 				http_error(403);
 				return (-1);
 			}
-			/*if ($auth->delmethod === Auths::OWN
+			if ($auth->delmethod === Auths::OWN
 				&& $auth->userid !== $id)
 			{
 				http_error(403);
 				return (-1);
-			}*/
+			}
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -392,5 +395,6 @@
 			
 			http_error(200);
 		}
+		//*/
 	}
 ?>
