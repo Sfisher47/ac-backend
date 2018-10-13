@@ -237,10 +237,10 @@ CREATE TABLE `Users` (
   `picture` blob,
   `phonenumber` varchar(40)  NULL,
   `gender` enum('male','female') NOT NULL,
-  `postmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'none',
+  `postmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `patchmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `getmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
-  `delmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'none',
+  `delmethod` enum('all', 'own', 'none') NOT NULL DEFAULT 'own',
   `signup_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ind_id` (`id`)
