@@ -13,6 +13,7 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
+	require_once __API_DIR__ . '/actions/ActionRequestUtilities.class.php';
 	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
 
 	class		ExtraRequest implements IRequestHandler
@@ -110,9 +111,13 @@
 			
 			// Create action
 			
-			ExtraRequestUtilities::SanitizeData($data);
+			ExtraRequestUtilities::SanitizeData($data);			
 			
-			// Create action
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->id) )
+			{
+				http_error(403);
+				return (-1);
+			}
 			
 			$query = 'INSERT INTO ' . $this->table . ' SET
 			title = :title,
