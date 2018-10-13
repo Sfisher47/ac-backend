@@ -60,15 +60,28 @@
 				return (-1);
 			}
 			
-			
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
 			
-			// Get one or all actions
-			// TO DO
+			// Get one or all extras
+			
+			$query = (!$id) ? 'SELECT * FROM ' . $this->table . " WHERE user_id = $auth->userid"
+						        : "SELECT * FROM " . $this->table . " WHERE id = $id and user_id = $auth->userid";
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
 
 			echo json_encode($ret);
 		}
