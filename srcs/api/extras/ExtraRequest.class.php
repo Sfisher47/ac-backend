@@ -59,7 +59,6 @@
 				return (-1);
 			}
 			
-			
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -69,7 +68,7 @@
 			// Get one or all extras
 			
 			$query = (!$id) ? 'SELECT * FROM ' . $this->table . " WHERE user_id = $auth->userid"
-						        : "SELECT * FROM " . $this->table . " WHERE id = $id";
+						        : "SELECT * FROM " . $this->table . " WHERE id = $id and user_id = $auth->userid";
 			
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
