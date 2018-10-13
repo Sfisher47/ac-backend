@@ -113,7 +113,7 @@
 			
 			ExtraRequestUtilities::SanitizeData($data);			
 			
-			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->id) )
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) )
 			{
 				http_error(403);
 				return (-1);
