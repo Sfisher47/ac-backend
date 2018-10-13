@@ -338,6 +338,63 @@
 		// The API cant allow to delete any user from users request		 
 		public function		Delete($kwargs)
 		{			
+			/*if (!$kwargs)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+			if (!isset($kwargs['id']))
+			{
+				internal_error("Wrong id", __FILE__, __LINE__);
+				http_error(400);
+				return (-1);
+			}
+
+			$id = $kwargs['id'];
+			$db = $kwargs['db'];
+			$auth = $kwargs["auth"];
+
+			if ($auth->delmethod === Auths::NONE)
+			{
+				http_error(403);
+				return (-1);
+			}
+			
+			if ($auth->delmethod === Auths::OWN
+				&& $auth->userid !== $id)
+			{
+				http_error(403);
+				return (-1);
+			}
+			
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+			
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+				if (!$stmt->execute())
+				{
+					internal_error("stmt->execute : ", __FILE__, __LINE__);
+					return (-1);
+				}
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			*/
+			
 			http_error(405);
 		}
 	}
