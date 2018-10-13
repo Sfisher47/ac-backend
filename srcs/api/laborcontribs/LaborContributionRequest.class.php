@@ -13,11 +13,11 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
-	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
+	require_once __API_DIR__ . '/laborcontribs/LaborContributionRequestUtilities.class.php';
 
-	class		ExtraRequest implements IRequestHandler
+	class		LaborContributionRequest implements IRequestHandler
 	{
-		private			$table = "Extras";
+		private			$table = "LaborContributions";
 		public static	$verbose = false;
 
 // 		contructor
@@ -66,7 +66,7 @@
 				return (-1);
 			}
 			
-			// Get one or all actions
+			// Get one or all laborcontribs
 			// TO DO
 
 			echo json_encode($ret);
@@ -108,7 +108,7 @@
 				}
 			}
 			
-			// Create action
+			// Create laborcontrib
 			// TO DO
 			
 			http_error(201);
@@ -141,7 +141,7 @@
 			}
 			
 			if ($auth->patchmethod === Auths::OWN
-				&& !ExtraRequestUtilities::IsOwn($db, $id, $auth->userid))
+				&& !LaborContributionRequestUtilities::IsOwn($db, $id, $auth->userid))
 			{
 				http_error(403);
 				return (-1);
@@ -164,60 +164,8 @@
 				}
 			}
 			
-			// Put update action here
-			
-			ExtraRequestUtilities::SanitizeData($data);
-			
-			$query = 'UPDATE ' . $this->table . ' SET '
-			. ((isset($data->title)) ? 'title = :title,' : '')
-			. ((isset($data->street)) ? 'street = :street,' : '')
-			. ((isset($data->address_info)) ? 'address_info = :addressInfo,' : '')
-			. ((isset($data->postal_code)) ? 'postal_code = :codePostal,' : '')
-			. ((isset($data->city)) ? 'city = :city,' : '')
-			. ((isset($data->country)) ? 'coutry = :country,' : '')
-			. ((isset($data->description)) ? 'description = :description,' : '')
-			. ((isset($data->date)) ? 'date = :date,' : '')
-			. ((isset($data->time)) ? 'time = :time,' : '')
-			. ((isset($data->duration)) ? 'duration = :duration,' : '')
-			. ((isset($data->action_id)) ? 'action_id = :actionId,' : '')
-			. 'id = id'
-			. ' WHERE id = :id';			
-			
-			$conn = $db->Connect();
-			$stmt = $conn->prepare($query);
-			
-			try
-			{
-				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-				(isset($data->title)) ? $stmt->bindParam(':title', $data->title) : false;
-				(isset($data->street)) ? $stmt->bindParam(':street', $data->street) : false;
-				(isset($data->address_info)) ? $stmt->bindParam(':addressInfo', $data->address_info) : false;
-				(isset($data->postal_code)) ? $stmt->bindParam(':codePostal', $data->postal_code) : false;
-				(isset($data->city)) ? $stmt->bindParam(':city', $data->city) : false;
-				(isset($data->country)) ? $stmt->bindParam(':country', $data->country) : false;
-				(isset($data->description)) ? $stmt->bindParam(':description', $data->description) : false;
-				(isset($data->date)) ? $stmt->bindParam(':date', $data->date) : false;
-				(isset($data->time)) ? $stmt->bindParam(':time', $data->time) : false;
-				(isset($data->duration)) ? $stmt->bindParam(':duration', $data->duration) : false;
-				(isset($data->action_id)) ? $stmt->bindParam(':actionId', $data->action_id) : false;
-			}
-			catch (Exception $e)
-			{
-				internal_error("stmt->bindParam : " . $e->getMessage(),
-								__FILE__, __LINE__);
-				return (-1);
-			}
-			
-			try
-			{
-				$stmt->execute();
-			}
-			catch (Exception $e)
-			{
-				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
-				http_error(400, $e->getMessage());
-				return (-1);				
-			}
+			// Put update laborcontrib here
+			// TO DO
 			
 			http_error(200);
 		}
@@ -247,7 +195,7 @@
 			}
 			
 			if ($auth->delmethod === Auths::OWN
-				&& !ExtraRequestUtilities::IsOwn($db, $id, $auth->userid))
+				&& !LaborContributionRequestUtilities::IsOwn($db, $id, $auth->userid))
 			{
 				http_error(403);
 				return (-1);
@@ -259,34 +207,8 @@
 				return (-1);
 			}
 			
-			// Delete extras
-			
-			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
-
-			$conn = $db->Connect();
-			$stmt = $conn->prepare($query);
-			
-			try
-			{
-				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-			}
-			catch (Exception $e)
-			{
-				internal_error("stmt->bindParam : " . $e->getMessage(),
-							__FILE__, __LINE__);
-				return (-1);
-			}
-			
-			try
-			{
-				$stmt->execute();
-			}
-			catch (Exception $e)
-			{
-				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
-				http_error(400, $e->getMessage());
-				return (-1);
-			}
+			// Delete laborcontrib
+			// TO DO
 			
 			http_error(200);
 			
