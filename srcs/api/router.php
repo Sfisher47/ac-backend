@@ -14,6 +14,8 @@
 
 // Import
 require_once __API_DIR__ . '/actions/ActionRequest.class.php';
+require_once __API_DIR__ . '/extras/ExtraRequest.class.php';
+require_once __API_DIR__ . '/laborneeds/LaborNeedRequest.class.php';
 
 //plateform toggler
 $ac_script = isset($_SERVER['AC_SCRIPT']);
@@ -174,6 +176,8 @@ function		HandleRequest($uri, $db, $authorizations)
 	$create = [
 		'users' => 'UserRequest',
 		'actions' => 'ActionRequest',
+		'extras' => 'ExtraRequest',
+		'laborneeds' => 'LaborNeedRequest',
 	];
 
 	$methods = [
