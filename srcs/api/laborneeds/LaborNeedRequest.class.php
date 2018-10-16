@@ -13,6 +13,8 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
+	require_once __API_DIR__ . '/actions/ActionRequestUtilities.class.php';
+	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
 	require_once __API_DIR__ . '/laborneeds/LaborNeedRequestUtilities.class.php';
 
 	class		LaborNeedRequest implements IRequestHandler
@@ -121,9 +123,16 @@
 				}
 			}
 			
-			// Create action
+			// Create laborneed
 			
 			LaborNeedRequestUtilities::SanitizeData($data);
+			
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) 
+			||   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			{
+				http_error(403);
+				return (-1);
+			}
 			
 			$query = 'INSERT INTO ' . $this->table . ' SET
 			title = :title,
