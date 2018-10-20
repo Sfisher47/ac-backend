@@ -57,8 +57,7 @@
 			{
 				http_error(403);
 				return (-1);
-			}
-			
+			}			
 			
 			if (!$db)
 			{
@@ -66,9 +65,10 @@
 				return (-1);
 			}
 			
+			
 			// Get one or all laborneeds
-			$query = (!$id) ? 'SELECT * FROM ' . $this->table
-						        : "SELECT * FROM " . $this->table . " WHERE id = $id";
+			$query = (!$id) ? 'SELECT t0.* FROM ' . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE user_id = $auth->userid"
+						        : "SELECT t0.* FROM " . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t0.id = $id AND t1.user_id = $auth->userid";
 			
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
