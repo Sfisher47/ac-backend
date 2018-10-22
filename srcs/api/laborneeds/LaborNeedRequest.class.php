@@ -127,11 +127,18 @@
 			
 			LaborNeedRequestUtilities::SanitizeData($data);
 			
+			/*
 			if ( !isset($data->action_id) && !isset($data->extra_id) )
 			{
 				internal_error("action or extra is required", __FILE__, __LINE__);				
 				http_error(403);
 				return (-1);
+			}
+			*/
+			
+			if ( isset($data->action_id) && isset($data->extra_id) )
+			{
+				$data->extra_id = null;
 			}
 			
 			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) 
