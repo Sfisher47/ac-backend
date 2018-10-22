@@ -127,9 +127,17 @@
 			
 			LaborNeedRequestUtilities::SanitizeData($data);
 			
-			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) 
-			||   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			if ( !isset($data->action_id) && !isset($data->extra_id) )
 			{
+				internal_error("action or extra is required", __FILE__, __LINE__);				
+				http_error(403);
+				return (-1);
+			}
+			
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) 
+		  &&   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			{
+				internal_error("user isnt owner action or extra", __FILE__, __LINE__);	
 				http_error(403);
 				return (-1);
 			}
@@ -138,9 +146,10 @@
 			title = :title,
 			description = :description,
 			required = :required,
-			collected = :collected,
-			action_id = :actionId,
-			extra_id = :extraId;';
+			collected = :collected'
+			. (isset($data->action_id) ? ',action_id = :actionId' : '')
+			. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
+			. ';';
 			
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
@@ -151,8 +160,8 @@
 				$stmt->bindParam(':description', $data->description);
 				$stmt->bindParam(':required', $data->required);
 				$stmt->bindParam(':collected', $data->collected);
-				$stmt->bindParam(':actionId', $data->action_id);
-				$stmt->bindParam(':extraId', $data->extra_id);
+				isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
+				isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
 				
 			}
 			catch (Exception $e)
