@@ -1,9 +1,11 @@
 {
-	"authHost" : "localhost",
-	"apiHost" : "localhost",
-	"dbUserName" : "root",
- 	"dbPassword" : "Hundezucht_",
-	"apiDBName" : "actions_citoyennes",
-	"authDBName" : "ac_authentication",
+	"authHost" : "db759300753.hosting-data.io",
+	"apiHost" : "db759300709.hosting-data.io",
+	"apiDBUserName" : "dbo759300709",
+	"authDBUserName" : "dbo759300753",
+ 	"apiDBPassword" : "ac-apiHackaton27",
+ 	"authDBPassword" : "ac-authHackaton27",
+	"apiDBName" : "db759300709",
+	"authDBName" : "db759300753",
 	"testApiKey" : "test"
 }
