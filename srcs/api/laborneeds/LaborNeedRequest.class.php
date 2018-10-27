@@ -13,6 +13,8 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
+	require_once __API_DIR__ . '/actions/ActionRequestUtilities.class.php';
+	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
 	require_once __API_DIR__ . '/laborneeds/LaborNeedRequestUtilities.class.php';
 
 	class		LaborNeedRequest implements IRequestHandler
@@ -121,8 +123,71 @@
 				}
 			}
 			
-			// Create action
-			// TO DO
+			// Create laborneed
+			
+			LaborNeedRequestUtilities::SanitizeData($data);
+			
+			/*
+			if ( !isset($data->action_id) && !isset($data->extra_id) )
+			{
+				internal_error("action or extra is required", __FILE__, __LINE__);				
+				http_error(403);
+				return (-1);
+			}
+			*/
+			
+			if ( isset($data->action_id) && isset($data->extra_id) )
+			{
+				$data->extra_id = null;
+			}
+			
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) 
+		  &&   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			{
+				internal_error("user isnt owner action or extra", __FILE__, __LINE__);	
+				http_error(403);
+				return (-1);
+			}
+			
+			$query = 'INSERT INTO ' . $this->table . ' SET
+			title = :title,
+			description = :description,
+			required = :required,
+			collected = :collected'
+			. (isset($data->action_id) ? ',action_id = :actionId' : '')
+			. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
+			. ';';
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(':title', $data->title);
+				$stmt->bindParam(':description', $data->description);
+				$stmt->bindParam(':required', $data->required);
+				$stmt->bindParam(':collected', $data->collected);
+				isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
+				isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
+				
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
 			
 			http_error(201);
 		}
