@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sat Sep 22 14:52:57 2018                        by elhmn        */
+/*   Updated: Sat Oct 27 17:56:05 2018                        by u89115211    */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ function		GetAuthorizations($apiKey)
 	}
 	$db->host = Config::GetInstance()->authHost;
 	$db->dbName = Config::GetInstance()->authDBName;
+	$db->dbPassword = Config::GetInstance()->authDBPassword;
+	$db->dbUserName = Config::GetInstance()->authDBUserName;
 	if (!($conn = $db->Connect()))
 	{
 		internal_error("conn set to null", __FILE__, __LINE__);
@@ -153,7 +155,7 @@ function		IsAuthorized($uri)
 	{
 		return ($authorizations);
 	}
-	
+
 	if (!$uri)
 	{
 		internal_error("uri set to null",

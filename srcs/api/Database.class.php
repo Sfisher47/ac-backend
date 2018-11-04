@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jan 01 01:00:00 1970                        by elhmn        */
-/*   Updated: Sat Sep 15 18:53:41 2018                        by elhmn        */
+/*   Updated: Sat Oct 27 17:13:47 2018                        by elhmn        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,15 @@
 		public	$host = null;
 		public	$dbName = null;
 		private	$conn = null;
+		public	$dbUserName = null;
+		public	$dbPassword = null;
 
 		public function		Init()
 		{
 			$this->host = Config::GetInstance()->apiHost;
 			$this->dbName = Config::GetInstance()->apiDBName;
+			$this->dbUserName = Config::GetInstance()->apiDBUserName;
+			$this->dbPassword = Config::GetInstance()->apiDBPassword;
 		}
 		//constructors
 		public function		__construct()
@@ -50,8 +54,10 @@
 			try
 			{
 				$this->conn = new PDO($dsn,
-								Config::GetInstance()->dbUserName,
-								Config::GetInstance()->dbPassword);
+								$this->dbUserName,
+								$this->dbPassword);
+// 								Config::GetInstance()->dbUserName,
+// 								Config::GetInstance()->dbPassword);
 				if (!$this->conn)
 				{
 					internal_error("this->conn set to null", __FILE__, __LINE__);
