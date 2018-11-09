@@ -1,11 +1,15 @@
 {
-	"authHost" : "db759300753.hosting-data.io",
-	"apiHost" : "db759300709.hosting-data.io",
-	"apiDBUserName" : "dbo759300709",
-	"authDBUserName" : "dbo759300753",
- 	"apiDBPassword" : "ac-apiHackaton27",
- 	"authDBPassword" : "ac-authHackaton27",
-	"apiDBName" : "db759300709",
-	"authDBName" : "db759300753",
+	"apiDBUserName" : "",
+	"authDBUserName" : "",
+ 	"apiDBPassword" : "",
+ 	"authDBPassword" : "",
+
+	"authHost" : "localhost",
+	"apiHost" : "localhost",
+	"dbUserName" : "root",
+ 	"dbPassword" : "",
+	"apiDBName" : "actions_citoyennes",
+	"authDBName" : "ac_authentication",
+	
 	"testApiKey" : "test"
 }
