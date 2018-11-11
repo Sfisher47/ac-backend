@@ -69,12 +69,12 @@
 			{
 				// Get all actions
 				$ret = (!$id) ? ActionDBRequest::GetAll($db)
-									: ActionDBRequest::GetById($db, $id);
+									: ActionDBRequest::GetOne($db, $id);
 			}
 			else
 			{
 				// Get one or all actions
-				$query = (!$id) ? ActionDBRequest::GetAllByUser($db, $auth->userid)
+				$ret = (!$id) ? ActionDBRequest::GetAllByUser($db, $auth->userid)
 									: ActionDBRequest::GetOneByUser($db, $id, $auth->userid);
 			}
 
@@ -126,11 +126,12 @@
 			ActionRequestUtilities::SanitizeData($data);
 
 			// Create action
-			$ok = ActionDBRequest::Create($db, $data);
+			$ok = ActionDBRequest::Create($db, $data, $auth->userid);
 
 			if( !$ok )
 			{
 				http_error(400, ActionDBRequest::getErrMessage());
+				return(-1);
 			}
 			
 			http_error(201);
@@ -190,7 +191,7 @@
 
 			ActionRequestUtilities::SanitizeData($data);
 			
-			$ok = ActionDBRequest::Update($db, $data);
+			$ok = ActionDBRequest::Update($db, $id, $data);
 
 			if( !$ok )
 			{

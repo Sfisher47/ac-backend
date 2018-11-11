@@ -44,7 +44,7 @@
 		
 		//-- READ --
 		
-		public static function		GetAll($db, $userId)
+		public static function		GetAll($db)
 		{
 			self::$errMessage = "";
 			
@@ -111,7 +111,7 @@
 		{
 			self::$errMessage = "";
 			
-			$query = "SELECT * FROM " . self::$table . " WHERE id = $id AND user_id = $auth->userid";
+			$query = "SELECT * FROM " . self::$table . " WHERE id = $id AND user_id = $userId";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
@@ -130,7 +130,7 @@
 		
 		//-- CREATE --
 		
-		public static function		Create($db, $data)
+		public static function		Create($db, $data, $userId)
 		{
 			self::$errMessage = "";
 			
@@ -162,7 +162,7 @@
 				$stmt->bindParam(':date', $data->date);
 				$stmt->bindParam(':time', $data->time);
 				$stmt->bindParam(':duration', $data->duration);
-				$stmt->bindParam(':userId', $auth->userid);
+				$stmt->bindParam(':userId', $userId);
 
 			}
 			catch (Exception $e)
@@ -191,7 +191,7 @@
 
 		//-- UPDATE --
 		
-		public static function		Update($db, $data)
+		public static function		Update($db, $id, $data)
 		{			
 			self::$errMessage = "";
 			
