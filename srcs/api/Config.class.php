@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Oct 27 17:48:37 2018                        by u89115211    */
+/*   Updated: Mon Nov 26 13:21:41 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@
 
 		public 		$apiVersions = [
 			'v1'
+		];
+
+		public 		$apiTypes = [
+			'public',
+			'private'
 		];
 
 		public 		$methods = [

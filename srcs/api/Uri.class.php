@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jun 30 13:58:19 2018                        by bmbarga      */
+/*   Updated: Mon Nov 26 14:33:16 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 		public	$id;
 		public	$apiVersion;
 		public	$apiKey;
+		public	$apiType;
 		public	$method;
 		public	$endPoint;
 
@@ -61,10 +62,15 @@
 			$data_arr = array_filter($data_arr);
 			$data_arr = array_values($data_arr);
 
- 			$this->apiVersion = (isset($data_arr[0])) ? $data_arr[0] : null;
- 			$this->apiKey = (isset($data_arr[1])) ? $data_arr[1] : null;
- 			$this->endPoint = (isset($data_arr[2])) ? $data_arr[2] : null;
- 			$this->id = (isset($data_arr[3])) ? $data_arr[3] : null;
+			$i = 0;
+ 			$this->apiVersion = (isset($data_arr[$i])) ? $data_arr[$i++] : null;
+ 			$this->apiType = (isset($data_arr[$i])) ? $data_arr[$i++] : null;
+			if ($this->apiType === "private")
+			{
+				$this->apiKey = (isset($data_arr[$i])) ? $data_arr[$i++] : null;
+			}
+ 			$this->endPoint = (isset($data_arr[$i])) ? $data_arr[$i++] : null;
+ 			$this->id = (isset($data_arr[$i])) ? $data_arr[$i++] : null;
 		}
 
 		public function		__toString()
@@ -72,6 +78,7 @@
 			return (__CLASS__ ." : \n{"
 				. "\n\tmethod = [$this->method], "
 				. "\n\tapiVersion = [$this->apiVersion], "
+				. "\n\tapiType = [$this->apiType], "
 				. "\n\tapiKey = [$this->apiKey], "
 				. "\n\tendPoint = [$this->endPoint], "
 				. "\n\tid = [$this->id]"
