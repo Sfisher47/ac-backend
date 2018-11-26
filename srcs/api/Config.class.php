@@ -48,6 +48,7 @@
 			'featuredactions',
 			'completedactions',
 			'extras',
+			'search',
 			'laborcontributions',
 			'materialcontributions',
 			'moneycontributions',

@@ -20,6 +20,7 @@ require_once __API_DIR__ . '/actions/ActionPubRequest.class.php';
 require_once __API_DIR__ . '/actions/FeaturedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/actions/CompletedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraPubRequest.class.php';
+require_once __API_DIR__ . '/search/SearchPubRequest.class.php';
 
 //plateform toggler
 $ac_script = isset($_SERVER['AC_SCRIPT']);
@@ -206,6 +207,7 @@ function		HandleRequest($uri, $db, $authorizations)
 			'featuredactions' => 'FeaturedActionsPubRequest',
 			'completedactions' => 'CompletedActionsPubRequest',
 			'extras' => 'ExtraPubRequest',
+			'search' => 'SearchPubRequest',
 		];
 	}
 	else if ($uri->apiType === "private")
