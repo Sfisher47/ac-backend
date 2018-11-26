@@ -45,6 +45,7 @@
 		public 		$endPoints = [
 			'users',
 			'actions',
+			'featuredactions',
 			'extras',
 			'laborcontributions',
 			'materialcontributions',

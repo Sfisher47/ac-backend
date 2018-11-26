@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Mon Nov 26 16:16:15 2018                        by bmbarga      */
+/*   Updated: Mon Nov 26 17:21:41 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ require_once __API_DIR__ . '/actions/ActionRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraRequest.class.php';
 require_once __API_DIR__ . '/laborneeds/LaborNeedRequest.class.php';
 require_once __API_DIR__ . '/actions/ActionPubRequest.class.php';
+require_once __API_DIR__ . '/actions/FeaturedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraPubRequest.class.php';
 
 //plateform toggler
@@ -201,6 +202,7 @@ function		HandleRequest($uri, $db, $authorizations)
 	{
 		$request = [
 			'actions' => 'ActionPubRequest',
+			'featuredactions' => 'FeaturedActionsPubRequest',
 			'extras' => 'ExtraPubRequest',
 		];
 	}
