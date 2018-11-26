@@ -46,6 +46,7 @@
 			'users',
 			'actions',
 			'featuredactions',
+			'completedactions',
 			'extras',
 			'laborcontributions',
 			'materialcontributions',
