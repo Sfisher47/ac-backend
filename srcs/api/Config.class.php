@@ -44,6 +44,7 @@
 
 		public 		$endPoints = [
 			'users',
+			'signup',
 			'actions',
 			'featuredactions',
 			'completedactions',

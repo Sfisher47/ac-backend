@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Mon Nov 26 17:37:48 2018                        by bmbarga      */
+/*   Updated: Tue Nov 27 11:20:37 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ require_once __API_DIR__ . '/actions/FeaturedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/actions/CompletedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraPubRequest.class.php';
 require_once __API_DIR__ . '/search/SearchPubRequest.class.php';
+require_once __API_DIR__ . '/users/SignupPubRequest.class.php';
 
 //plateform toggler
 $ac_script = isset($_SERVER['AC_SCRIPT']);
@@ -208,6 +209,7 @@ function		HandleRequest($uri, $db, $authorizations)
 			'completedactions' => 'CompletedActionsPubRequest',
 			'extras' => 'ExtraPubRequest',
 			'search' => 'SearchPubRequest',
+			'signup' => 'SignupPubRequest',
 		];
 	}
 	else if ($uri->apiType === "private")
