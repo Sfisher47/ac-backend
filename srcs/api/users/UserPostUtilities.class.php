@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Aug 05 09:27:59 2018                        by bmbarga      */
+/*   Updated: Tue Nov 27 10:05:59 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,30 +77,6 @@ class		UserPostUtilities
 			internal_error("conn set to null", __FILE__, __LINE__);
 			return (false);
 		}
-		
-		//Check if login already exists
-		if (isset($data->login))
-		{
-			$queryLogin = "SELECT login FROM $tableName WHERE login=:login";
-			try
-			{
-				$stmtLogin = $conn->prepare($queryLogin);
-				$stmtLogin->bindParam(':login', $data->login);
-				$stmtLogin->execute();
-				$ret = $stmtLogin->fetchAll(PDO::FETCH_ASSOC);
-				if ($ret)
-				{
-					internal_error("login already exists", __FILE__, __LINE__);
-					return false;
-				}
-			}
-			catch(Exception $e)
-			{
-				internal_error("stmtLogin : " . $e->getMessage(),
-							__FILE__, __LINE__);
-				return (false);
-			}
-		}
 
 		//Check if email already exists
 		if(isset($data->email))
@@ -127,9 +103,9 @@ class		UserPostUtilities
 		}
 		return (true);
 	}
-	
+
 	public static function	IsEmailValid($email)
-	{ 
+	{
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
