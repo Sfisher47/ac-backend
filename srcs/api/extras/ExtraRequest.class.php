@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Aug 05 10:19:39 2018                        by bmbarga      */
+/*   Updated: Tue Nov 27 18:56:39 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,31 +52,31 @@
 			$id = $kwargs["id"];
 			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
-			
-			
+
+
 			if ($auth->getmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			// Get one or all extras
-			
+
 			$query = (!$id) ? 'SELECT * FROM ' . $this->table . " WHERE user_id = $auth->userid"
 						        : "SELECT * FROM " . $this->table . " WHERE id = $id and user_id = $auth->userid";
-			
+
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
-			
+
 			$stmt->execute();
 			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
+
 			if (!$ret)
 			{
 				echo '{"response" : "nothing found"}';
@@ -95,23 +95,24 @@
 								__FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			$db = $kwargs["db"];
-			$auth = $kwargs["auth"];			
-			
+			$auth = $kwargs["auth"];
+			$data = $kwargs["data"];
+
 			if ($auth->postmethod === Auths::NONE)
 			{
 				http_error(403);
 				return (-1);
-			}			
-			
+			}
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-			
-			if (!$GLOBALS['ac_script'])
+
+			if (!$data && !$GLOBALS['ac_script'])
 			{
 				$data = json_decode(file_get_contents("php://input"));
 				if (!$data)
@@ -121,17 +122,17 @@
 					return (-1);
 				}
 			}
-			
+
 			// Create action
-			
-			ExtraRequestUtilities::SanitizeData($data);			
-			
+
+			ExtraRequestUtilities::SanitizeData($data);
+
 			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid) )
 			{
 				http_error(403);
 				return (-1);
 			}
-			
+
 			$query = 'INSERT INTO ' . $this->table . ' SET
 			title = :title,
 			street = :street,
@@ -145,11 +146,11 @@
 			duration = :duration,
 			user_id = :userId,
 			action_id = :actionId';
-			
-			
+
+
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
-			
+
 			try
 			{
 				$stmt->bindParam(':title', $data->title);
@@ -164,7 +165,7 @@
 				$stmt->bindParam(':duration', $data->duration);
 				$stmt->bindParam(':actionId', $data->action_id);
 				$stmt->bindParam(':userId', $auth->userid);
-				
+
 			}
 			catch (Exception $e)
 			{
@@ -172,7 +173,7 @@
 								__FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			try
 			{
 				$stmt->execute();
@@ -181,10 +182,11 @@
 			{
 				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
 				http_error(400, $e->getMessage());
-				return (-1);				
+				return (-1);
 			}
-			
+
 			http_error(201);
+			return ($conn->lastInsertId());
 		}
 
 		public function		Patch($kwargs)
@@ -212,14 +214,14 @@
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if ($auth->patchmethod === Auths::OWN
 				&& !ExtraRequestUtilities::IsOwn($db, $id, $auth->userid))
 			{
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -236,11 +238,11 @@
 					return (-1);
 				}
 			}
-			
+
 			// Put update action here
-			
+
 			ExtraRequestUtilities::SanitizeData($data);
-			
+
 			$query = 'UPDATE ' . $this->table . ' SET '
 			. ((isset($data->title)) ? 'title = :title,' : '')
 			. ((isset($data->street)) ? 'street = :street,' : '')
@@ -254,11 +256,11 @@
 			. ((isset($data->duration)) ? 'duration = :duration,' : '')
 			. ((isset($data->action_id)) ? 'action_id = :actionId,' : '')
 			. 'id = id'
-			. ' WHERE id = :id';			
-			
+			. ' WHERE id = :id';
+
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
-			
+
 			try
 			{
 				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
@@ -280,7 +282,7 @@
 								__FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			try
 			{
 				$stmt->execute();
@@ -289,9 +291,9 @@
 			{
 				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
 				http_error(400, $e->getMessage());
-				return (-1);				
+				return (-1);
 			}
-			
+
 			http_error(200);
 		}
 
@@ -318,27 +320,27 @@
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if ($auth->delmethod === Auths::OWN
 				&& !ExtraRequestUtilities::IsOwn($db, $id, $auth->userid))
 			{
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			// Delete extras
-			
+
 			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
-			
+
 			try
 			{
 				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
@@ -349,7 +351,7 @@
 							__FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			try
 			{
 				$stmt->execute();
@@ -360,9 +362,9 @@
 				http_error(400, $e->getMessage());
 				return (-1);
 			}
-			
+
 			http_error(200);
-			
+
 		}
 	}
 ?>

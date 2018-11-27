@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Tue Nov 27 11:20:37 2018                        by bmbarga      */
+/*   Updated: Tue Nov 27 13:05:20 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ require_once __API_DIR__ . '/actions/ActionRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraRequest.class.php';
 require_once __API_DIR__ . '/laborneeds/LaborNeedRequest.class.php';
 require_once __API_DIR__ . '/actions/ActionPubRequest.class.php';
+require_once __API_DIR__ . '/actions/CreateActionPubRequest.class.php';
 require_once __API_DIR__ . '/actions/FeaturedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/actions/CompletedActionsPubRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraPubRequest.class.php';
@@ -207,6 +208,7 @@ function		HandleRequest($uri, $db, $authorizations)
 			'actions' => 'ActionPubRequest',
 			'featuredactions' => 'FeaturedActionsPubRequest',
 			'completedactions' => 'CompletedActionsPubRequest',
+			'createaction' => 'CreateActionPubRequest',
 			'extras' => 'ExtraPubRequest',
 			'search' => 'SearchPubRequest',
 			'signup' => 'SignupPubRequest',

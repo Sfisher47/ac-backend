@@ -47,6 +47,7 @@
 			'signup',
 			'actions',
 			'featuredactions',
+			'createaction',
 			'completedactions',
 			'extras',
 			'search',
