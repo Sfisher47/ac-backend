@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Wed Nov 28 12:29:12 2018                        by bmbarga      */
+/*   Updated: Wed Nov 28 16:16:20 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
@@ -83,6 +83,31 @@
 			ob_clean();
 
 			//Create materialneeds with action_id
+			if (property_exists($data->action, 'materials'))
+			{
+				foreach ($data->action->materials as $material)
+				{
+					if (!($materialNeed = new MaterialNeedRequest()))
+					{
+						internal_error("laborNeed set to null", __FILE__, __LINE__);
+						http_error(500);
+						return (-1);
+					}
+					$material = array_merge((array)$material,
+								array("action_id" => $action_id));
+					$kwargs = array_merge($kwargs,
+								array("data" => (object)$material));
+					//Clean response
+					ob_start();
+					$materialNeed_id = $materialNeed->Post($kwargs);
+					ob_clean();
+					if ($materialNeed_id < 0)
+					{
+						http_error(400);
+						return (-1);
+					}
+				}
+			}
 
 			//Create laborneeds with action_id
 			if (property_exists($data->action, 'participants'))
@@ -111,17 +136,43 @@
 					http_error(500);
 					return (-1);
 				}
-				$data->extra = array_merge((array)$data->extra,
+				$data->extra = (object)array_merge((array)$data->extra,
 							array("action_id" => $action_id));
 				$kwargs = array_merge($kwargs,
-							array("data" => (object)$data->extra));
+							array("data" => $data->extra));
 				//Clean response
 				ob_start();
 				$extra_id = $extra->Post($kwargs);
 				ob_clean();
+
 				//Create materialneeds with extra_id
-				//Create laborneeds with extra_id
+				if (property_exists($data->extra, 'materials'))
+				{
+					foreach ($data->extra->materials as $material)
+					{
+						if (!($materialNeed = new MaterialNeedRequest()))
+						{
+							internal_error("laborNeed set to null", __FILE__, __LINE__);
+							http_error(500);
+							return (-1);
+						}
+						$material = array_merge((array)$material,
+									array("extra_id" => $extra_id));
+						$kwargs = array_merge($kwargs,
+									array("data" => (object)$material));
+						//Clean response
+						ob_start();
+						$materialNeed_id = $materialNeed->Post($kwargs);
+						ob_clean();
+						if ($materialNeed_id < 0)
+						{
+							http_error(400);
+							return (-1);
+						}
+					}
+				}
 			}
+
 			if ($extra_id < 0
 				|| $action_id < 0
 				|| $laborNeed_id < 0)

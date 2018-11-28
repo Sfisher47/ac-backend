@@ -28,7 +28,6 @@
 		]
 	},
 	"extra" : {
-		"action_id" : 6,
 		"title" : "Nettoyage",
 		"address" : "237 douala",
 		"street" : "ndokoti",
@@ -43,9 +42,10 @@
 			{"url" : "image_1.jpg"},
 			{"url" : "image_2.jpg"}
 		],
+
 		"materials" : [
-			{"title" : "brouette", "required" : 1, "unit": "none"},
-			{"title" : "sable", "required" : 1, "unit": "kg"}
+			{"title" : "brouette extra", "required" : 1, "unit": "none"},
+			{"title" : "sable extra", "required" : 1, "unit": "kg"}
 		]
 	}
 }

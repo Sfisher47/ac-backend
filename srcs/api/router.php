@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Tue Nov 27 13:05:20 2018                        by bmbarga      */
+/*   Updated: Wed Nov 28 14:06:58 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 require_once __API_DIR__ . '/actions/ActionRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraRequest.class.php';
 require_once __API_DIR__ . '/laborneeds/LaborNeedRequest.class.php';
+require_once __API_DIR__ . '/materialneeds/MaterialNeedRequest.class.php';
 require_once __API_DIR__ . '/actions/ActionPubRequest.class.php';
 require_once __API_DIR__ . '/actions/CreateActionPubRequest.class.php';
 require_once __API_DIR__ . '/actions/FeaturedActionsPubRequest.class.php';
@@ -221,6 +222,7 @@ function		HandleRequest($uri, $db, $authorizations)
 			'actions' => 'ActionRequest',
 			'extras' => 'ExtraRequest',
 			'laborneeds' => 'LaborNeedRequest',
+			'materialneeds' => 'MaterialNeedRequest',
 		];
 	}
 
