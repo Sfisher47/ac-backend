@@ -1,8 +1,4 @@
 {
-	"title" : "Nettoyage",
-	"description" : "test",
-	"required" : 0,
-	"collected" : 0,
-	"action_id" : 1,
-	"extra_id" : 1
+	"required" : 10,
+	"action_id" : 1
 }

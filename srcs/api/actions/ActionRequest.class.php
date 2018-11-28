@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Oct 27 17:44:19 2018                        by u89115211    */
+/*   Updated: Tue Nov 27 16:50:02 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@
 
 			$db = $kwargs["db"];
 			$auth = $kwargs["auth"];
+			$data = $kwargs["data"];
 
 			if ($auth->postmethod === Auths::NONE)
 			{
@@ -118,7 +119,7 @@
 				return (-1);
 			}
 
-			if (!$GLOBALS['ac_script'])
+			if (!$data && !$GLOBALS['ac_script'])
 			{
 				$data = json_decode(file_get_contents("php://input"));
 				if (!$data)
@@ -170,7 +171,6 @@
 								__FILE__, __LINE__);
 				return (-1);
 			}
-
 			try
 			{
 				$stmt->execute();
@@ -181,8 +181,8 @@
 				http_error(400, $e->getMessage());
 				return (-1);
 			}
-
 			http_error(201);
+			return ($conn->lastInsertId());
 		}
 
 		public function		Patch($kwargs)
