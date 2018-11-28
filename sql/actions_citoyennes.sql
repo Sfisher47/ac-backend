@@ -106,10 +106,10 @@ DROP TABLE IF EXISTS `LaborNeeds`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LaborNeeds` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(256) NOT NULL,
+  `title` varchar(256) NULL,
   `description` varchar(400)  NULL,
   `required` int(10) unsigned NOT NULL,
-  `collected` int(10) unsigned NOT NULL,
+  `collected` int(10) unsigned NOT NULL DEFAULT 0,
   `action_id` int(10) unsigned  NULL,
   `extra_id` int(10) unsigned  NULL,
   PRIMARY KEY (`id`),

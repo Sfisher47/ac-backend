@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Tue Nov 27 22:58:52 2018                        by bmbarga      */
+/*   Updated: Wed Nov 28 12:29:12 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
@@ -83,7 +83,25 @@
 			ob_clean();
 
 			//Create materialneeds with action_id
+
 			//Create laborneeds with action_id
+			if (property_exists($data->action, 'participants'))
+			{
+				if (!($laborNeed = new LaborNeedRequest()))
+				{
+					internal_error("laborNeed set to null", __FILE__, __LINE__);
+					http_error(500);
+					return (-1);
+				}
+				$data->action->participants = array_merge((array)$data->action->participants,
+							array("action_id" => $action_id));
+				$kwargs = array_merge($kwargs,
+							array("data" => (object)$data->action->participants));
+				//Clean response
+				ob_start();
+				$laborNeed_id = $laborNeed->Post($kwargs);
+				ob_clean();
+			}
 
 			if (property_exists($data, 'extra'))
 			{
@@ -104,7 +122,9 @@
 				//Create materialneeds with extra_id
 				//Create laborneeds with extra_id
 			}
-			if ($extra_id < 0 || $action_id < 0)
+			if ($extra_id < 0
+				|| $action_id < 0
+				|| $laborNeed_id < 0)
 			{
 				http_error(400);
 				return (-1);

@@ -1,5 +1,5 @@
 {
-	"token": "2977f1e262b6189d3555734a90b5b3090e81b03b",
+	"token": "token",
 	"action" :
 	{
 		"title" : "Nettoyage",
@@ -12,7 +12,10 @@
 		"date" : "2018-09-25",
 		"time" : 100000,
 		"duration" : 40000,
-		"participants" : 1,
+
+		"participants" : {
+			"required": 1
+		},
 
 		"pictures" : [
 			{"url" : "image_1.jpg"},
