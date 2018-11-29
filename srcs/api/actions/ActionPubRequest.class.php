@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Mon Nov 26 15:59:47 2018                        by bmbarga      */
+/*   Updated: Thu Nov 29 16:39:54 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@
 			$id = $kwargs["id"];
 
 			// Get all actions
-			$baseQuery = "SELECT Actions.*, Extras.id as extra_id FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id";
+			$baseQuery = "SELECT mix.*, usr.lastname, usr.firstname FROM (SELECT Actions.*, Extras.id as extra_id FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id) mix LEFT JOIN Users usr ON usr.id=mix.user_id ";
 			$query = (!$id) ? $baseQuery
-								: $baseQuery . " WHERE Actions.id = $id";
+								: $baseQuery . " WHERE mix.id = $id";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);

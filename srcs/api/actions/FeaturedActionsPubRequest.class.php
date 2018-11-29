@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Thu Nov 29 16:03:26 2018                        by bmbarga      */
+/*   Updated: Thu Nov 29 16:41:12 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
@@ -51,7 +51,7 @@
 
 			//This is a basic request and it will be enhanced later
 			// Get all actions
-			$baseQuery = "SELECT Actions.*, Extras.id as extra_id FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id";
+			$baseQuery = "SELECT mix.*, usr.lastname, usr.firstname FROM (SELECT Actions.*, Extras.id as extra_id FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id) mix LEFT JOIN Users usr ON usr.id=mix.user_id ";
 			$query = $baseQuery . " LIMIT 6";
 
 			$conn = $db->Connect();
