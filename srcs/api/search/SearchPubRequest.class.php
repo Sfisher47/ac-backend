@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Mon Nov 26 17:41:26 2018                        by elhmn        */
-/*   Updated: Mon Nov 26 19:50:02 2018                        by bmbarga      */
+/*   Updated: Thu Nov 29 18:24:41 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
@@ -57,8 +57,8 @@
 			// Get all actions
 			$baseQuery = "SELECT Actions.*, Extras.id as extra_id FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id"
 				. " WHERE "
-				. (isset($city) ? "	Actions.city='$city' AND " : "")
-				. (isset($country) ? " Actions.coutry='$country' AND " : "")
+				. (isset($city) && !empty($city) ? "	Actions.city='$city' AND " : "")
+				. (isset($country) && !empty($country) ? " Actions.coutry='$country' AND " : "")
 				. (isset($keyword) ? " Actions.description LIKE '%$keyword%' AND " : "")
 				. "Actions.id=Actions.id";
 			$query = $baseQuery . " LIMIT 10";
