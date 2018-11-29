@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:15:31 2018                        by elhmn        */
-/*   Updated: Sun Jul 01 11:54:25 2018                        by bmbarga      */
+/*   Updated: Thu Nov 29 12:14:46 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ require_once('srcs/api/users/UserPostUtilities.class.php');
 require_once('srcs/api/users/UserRequest.class.php');
 require_once('srcs/api/Config.class.php');
 require_once('srcs/api/router.php');
+
+header("Access-Control-Allow-Origin: *");
 
 ?>
