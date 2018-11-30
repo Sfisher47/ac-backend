@@ -71,8 +71,8 @@
 
 			if (!$ret)
 			{
-				echo '{"response" : "nothing found"}';
-				return (0);
+				http_error(204, '{"response" : "nothing found"}');
+				return (-1);
 			}
 
 			echo json_encode($ret);
