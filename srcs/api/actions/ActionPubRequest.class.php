@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Thu Nov 29 16:39:54 2018                        by bmbarga      */
+/*   Updated: Fri Nov 30 12:18:11 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@
 
 			if (!$ret)
 			{
-				echo '{"response" : "nothing found"}';
+				http_error(204, '{"response" : "nothing found"}');
 				return (0);
 			}
 
