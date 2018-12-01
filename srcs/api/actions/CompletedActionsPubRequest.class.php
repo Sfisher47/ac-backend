@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Thu Nov 29 16:42:49 2018                        by bmbarga      */
+/*   Updated: Thu Nov 29 16:43:10 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
@@ -62,8 +62,8 @@
 
 			if (!$ret)
 			{
-				echo '{"response" : "nothing found"}';
-				return (0);
+				http_error(204, '{"response" : "nothing found"}');
+				return (-1);
 			}
 
 			echo json_encode($ret);

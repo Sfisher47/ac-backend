@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Mon Nov 26 17:41:26 2018                        by elhmn        */
-/*   Updated: Thu Nov 29 18:24:41 2018                        by bmbarga      */
+/*   Updated: Fri Nov 30 15:40:36 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
@@ -55,13 +55,14 @@
 
 			//This is a basic request and it will be enhanced later
 			// Get all actions
-			$baseQuery = "SELECT Actions.*, Extras.id as extra_id FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id"
+			$baseQuery = "SELECT mix.*, usr.lastname, usr.firstname FROM (SELECT Actions.*, Extras.id as extra_id, labneed.required as participants FROM Actions LEFT JOIN Extras ON Extras.action_id = Actions.id LEFT JOIN LaborNeeds labneed ON Actions.id=labneed.action_id "
 				. " WHERE "
 				. (isset($city) && !empty($city) ? "	Actions.city='$city' AND " : "")
 				. (isset($country) && !empty($country) ? " Actions.coutry='$country' AND " : "")
 				. (isset($keyword) ? " Actions.description LIKE '%$keyword%' AND " : "")
-				. "Actions.id=Actions.id";
-			$query = $baseQuery . " LIMIT 10";
+				. "Actions.id=Actions.id"
+				. ") mix LEFT JOIN Users usr ON usr.id=mix.user_id ";
+			$query = $baseQuery . " LIMIT 20";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
@@ -71,8 +72,8 @@
 
 			if (!$ret)
 			{
-				echo '{"response" : "nothing found"}';
-				return (0);
+				http_error(204, '{"response" : "nothing found"}');
+				return (-1);
 			}
 
 			echo json_encode($ret);
