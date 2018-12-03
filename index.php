@@ -8,9 +8,11 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:15:31 2018                        by elhmn        */
-/*   Updated: Sun Jul 01 11:54:25 2018                        by bmbarga      */
+/*   Updated: Thu Nov 29 12:15:12 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
+
+header("Access-Control-Allow-Origin: *");
 
 define('__API_DIR__', dirname(__FILE__) . '/srcs/api');
 

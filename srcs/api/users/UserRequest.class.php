@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sun Aug 05 10:19:39 2018                        by bmbarga      */
+/*   Updated: Tue Nov 27 10:07:04 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,21 +112,13 @@
 			else
 			{
 				$data = json_decode('{
-										"login" : "user1",
 										"firstname" : "Boris",
-										"lastname" : "Mbarga",
 										"password" : "password",
-										"email" : "bmbarga@email.com",
-										"city" : "Yaounde",
-										"country" : "Cameroun",
-										"bio" : "Je suis con",
-										"picture" : "",
-										"phonenumber" : "092299344",
-										"gender" : "male"
+										"email" : "elfo@email.com"
 									}');
 			}
 			$data = UserPostUtilities::SanitizeData($data);
-			
+
 			if (isset($data->password))
 			{
 				//check credentials
@@ -135,11 +127,11 @@
 					http_error(400, "Empty password");
 					return (-1);
 				}
-			
+
 				//hash the user password
 				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
 			}
-			
+
 			//Check if email is well formatted
 			if (!UserPostUtilities::IsEmailValid($data->email))
 			{
@@ -153,35 +145,51 @@
 				return (-1);
 			}
 
+			if (!property_exists($data, "firstname")
+				|| !property_exists($data, "lastname")
+				|| !property_exists($data, "email")
+				|| !property_exists($data, "password"))
+			{
+				http_error(400,
+					"Request body must at least contain a firstname,"
+				   . " lastname, email and a password");
+				return (-1);
+			}
+
 			$query = 'INSERT INTO ' . $this->table
 					. ' SET
-						login = :login,
 						firstname = :firstname,
 						lastname = :lastname,
 						password = :password,
-						email = :email,
-						city = :city,
-						country = :country,
-						bio = :bio,
-						picture = :picture,
-						phonenumber = :phonenumber,
-						gender = :gender;';
+						email = :email,'
+					.	((!property_exists($data, "login")) ? "" : "login = :login,")
+					.	((!property_exists($data, "city")) ? "" : "city = :city,")
+					.	((!property_exists($data, "country")) ? "" : "country = :country,")
+					.	((!property_exists($data, "bio")) ? "" : "bio = :bio,")
+					.	((!property_exists($data, "picture")) ? "" : "picture = :picture,")
+					.	((!property_exists($data, "phonenumber"))
+							? "" : "phonenumber = :phonenumber,")
+					.	((!property_exists($data, "gender")) ? "" : "gender = :gender,");
+
+			//Putain c'est degueux
+			$len = strlen($query);
+			$query[$len - 1] = " ";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			try
 			{
-				$stmt->bindParam(':login', $data->login);
 				$stmt->bindParam(':firstname', $data->firstname);
 				$stmt->bindParam(':lastname', $data->lastname);
 				$stmt->bindParam(':password', $data->password);
 				$stmt->bindParam(':email', $data->email);
-				$stmt->bindParam(':city', $data->city);
-				$stmt->bindParam(':country', $data->country);
-				$stmt->bindParam(':bio', $data->bio);
-				$stmt->bindParam(':picture', $data->picture);
-				$stmt->bindParam(':phonenumber', $data->phonenumber);
-				$stmt->bindParam(':gender', $data->gender);
+				(!property_exists($data, "login")) ? : $stmt->bindParam(":login", $data->login);
+				(!property_exists($data, "city")) ? : $stmt->bindParam(":city", $data->city);
+				(!property_exists($data, "country")) ? : $stmt->bindParam(":country", $data->country);
+				(!property_exists($data, "bio")) ? : $stmt->bindParam(":bio", $data->bio);
+				(!property_exists($data, "picture")) ? : $stmt->bindParam(":picture", $data->picture);
+				(!property_exists($data, "phonenumber")) ? : $stmt->bindParam(":phonenumber", $data->phonenumber);
+				(!property_exists($data, "gender")) ? : $stmt->bindParam(":gender", $data->gender);
 			}
 			catch (Exception $e)
 			{
@@ -254,7 +262,7 @@
 									}');
 			}
 			$data = UserPostUtilities::SanitizeData($data);
-			
+
 			if (isset($data->password))
 			{
 				//check credentials
@@ -263,7 +271,7 @@
 					http_error(400, "Empty password");
 					return (-1);
 				}
-			
+
 				//hash the user password
 				$data->password = password_hash($data->password, PASSWORD_DEFAULT, ['cost'=>12]);
 			}
@@ -305,7 +313,7 @@
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 			try
-			{				
+			{
 				(!property_exists($data, "login")) ? : $stmt->bindParam(":login", $data->login);
 				(!property_exists($data, "firstname")) ? : $stmt->bindParam(":firstname", $data->firstname);
 				(!property_exists($data, "lastname")) ? : $stmt->bindParam(":lastname", $data->lastname);
@@ -333,11 +341,11 @@
 			}
 			http_error(200);
 		}
-		
-		 		
-		// The API cant allow to delete any user from users request		 
+
+
+		// The API cant allow to delete any user from users request
 		public function		Delete($kwargs)
-		{			
+		{
 			/*if (!$kwargs)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
@@ -359,20 +367,20 @@
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if ($auth->delmethod === Auths::OWN
 				&& $auth->userid !== $id)
 			{
 				http_error(403);
 				return (-1);
 			}
-			
+
 			if (!$db)
 			{
 				internal_error("db set to null", __FILE__, __LINE__);
 				return (-1);
 			}
-			
+
 			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
 
 			$conn = $db->Connect();
@@ -394,7 +402,7 @@
 				return (-1);
 			}
 			*/
-			
+
 			http_error(405);
 		}
 	}
