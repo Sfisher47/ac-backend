@@ -2,24 +2,23 @@
 
 /* ************************************************************************** */
 /*                                                                            */
-/*  UserRequest.class.php                                                     */
+/*  MaterialNeedRequest.class.php                                             */
 /*                                                                            */
 /*   By: elhmn <www.elhmn.com>                                                */
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
-/*   Created:                                                 by elhmn        */
-/*   Updated: Wed Nov 28 12:02:13 2018                        by bmbarga      */
+/*   Created: Wed Nov 28 12:43:52 2018                        by elhmn        */
+/*   Updated: Wed Nov 28 15:39:40 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
-
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
 	require_once __API_DIR__ . '/actions/ActionRequestUtilities.class.php';
 	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
-	require_once __API_DIR__ . '/laborneeds/LaborNeedRequestUtilities.class.php';
+	require_once __API_DIR__ . '/materialneeds/MaterialNeedRequestUtilities.class.php';
 
-	class		LaborNeedRequest implements IRequestHandler
+	class		MaterialNeedRequest implements IRequestHandler
 	{
-		private			$table = "LaborNeeds";
+		private			$table = "MaterialNeeds";
 		public static	$verbose = false;
 
 // 		contructor
@@ -69,8 +68,15 @@
 
 
 			// Get one or all laborneeds
-			$query = (!$id) ? 'SELECT t0.* FROM ' . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE user_id = $auth->userid"
-						        : "SELECT t0.* FROM " . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t0.id = $id AND t1.user_id = $auth->userid";
+			$baseQuery = "SELECT mat.*, mix.user_id FROM "
+				. $this->table
+				. " mat LEFT JOIN "
+				. " (SELECT act.id AS action_id, act.user_id, extr.id AS extra_id "
+				. " FROM Actions act LEFT JOIN Extras extr ON extr.action_id = act.id) "
+				. " mix ON mix.action_id=mat.action_id  OR mix.extra_id=mat.extra_id "
+				. " WHERE mix.user_id=$auth->userid ";
+			$query = (!$id) ? $baseQuery
+				: $baseQuery . " AND mat.id=$id ";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
@@ -126,7 +132,7 @@
 
 			// Create laborneed
 
-			LaborNeedRequestUtilities::SanitizeData($data);
+			MaterialNeedRequestUtilities::SanitizeData($data);
 
 			/*
 			if ( !isset($data->action_id) && !isset($data->extra_id) )
@@ -153,7 +159,8 @@
 			$query = 'INSERT INTO ' . $this->table . ' SET
 			required = :required,
 			title = :title,
-			description = :description'
+			description = :description,
+			unit = :unit'
 			. (isset($data->collected) ? ',collected = :collected' : '')
 			. (isset($data->action_id) ? ',action_id = :actionId' : '')
 			. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
@@ -167,6 +174,7 @@
 				$stmt->bindParam(':title', $data->title);
 				$stmt->bindParam(':description', $data->description);
 				$stmt->bindParam(':required', $data->required);
+				$stmt->bindParam(':unit', $data->unit);
 				isset($data->collected) ? $stmt->bindParam(':collected', $data->collected) : false;
 				isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
 				isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
@@ -195,128 +203,12 @@
 
 		public function		Patch($kwargs)
 		{
-			if (!$kwargs
-					|| !is_array($kwargs))
-			{
-				internal_error('kwargs not array or set to null',
-								__FILE__, __LINE__);
-				return (-1);
-			}
-			if (!isset($kwargs['id']))
-			{
-				internal_error("Wrong id", __FILE__, __LINE__);
-				http_error(400);
-				return (-1);
-			}
-
-			$id = $kwargs['id'];
-			$db = $kwargs["db"];
-			$auth = $kwargs["auth"];
-
-			if ($auth->patchmethod === Auths::NONE)
-			{
-				http_error(403);
-				return (-1);
-			}
-
-			if ($auth->patchmethod === Auths::OWN
-				&& !LaborNeedRequestUtilities::IsOwn($db, $id, $auth->userid))
-			{
-				http_error(403);
-				return (-1);
-			}
-
-			if (!$db)
-			{
-				internal_error("db set to null", __FILE__, __LINE__);
-				return (-1);
-			}
-
-			if (!$GLOBALS['ac_script'])
-			{
-				$data = json_decode(file_get_contents("php://input"));
-				if (!$data)
-				{
-					internal_error("data set to null", __FILE__, __LINE__);
-					http_error(204); //No Content
-					return (-1);
-				}
-			}
-
-			// Put update action here
-			// TO DO
-
-			http_error(200);
+			http_error(400);
 		}
 
 		public function		Delete($kwargs)
 		{
-			if (!$kwargs)
-			{
-				internal_error("kwargs not array or set to null", __FILE__, __LINE__);
-				return (-1);
-			}
-			if (!isset($kwargs['id']))
-			{
-				internal_error("Wrong id", __FILE__, __LINE__);
-				http_error(400);
-				return (-1);
-			}
-
-			$id = $kwargs['id'];
-			$db = $kwargs["db"];
-			$auth = $kwargs["auth"];
-
-			if ($auth->delmethod === Auths::NONE)
-			{
-				http_error(403);
-				return (-1);
-			}
-
-			if ($auth->delmethod === Auths::OWN
-				&& !LaborNeedRequestUtilities::IsOwn($db, $id, $auth->userid))
-			{
-				http_error(403);
-				return (-1);
-			}
-
-			if (!$db)
-			{
-				internal_error("db set to null", __FILE__, __LINE__);
-				return (-1);
-			}
-			
-			// Delete laborneed
-			
-			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
-
-			$conn = $db->Connect();
-			$stmt = $conn->prepare($query);
-			
-			try
-			{
-				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-			}
-			catch (Exception $e)
-			{
-				internal_error("stmt->bindParam : " . $e->getMessage(),
-							__FILE__, __LINE__);
-				return (-1);
-			}
-			
-			try
-			{
-				$stmt->execute();
-			}
-			catch (Exception $e)
-			{
-				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
-				http_error(400, $e->getMessage());
-				return (-1);
-			}
-			
-			http_error(200);
-
+			http_error(400);
 		}
 	}
 ?>

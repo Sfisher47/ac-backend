@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created: Thu Jun 28 14:18:29 2018                        by elhmn        */
-/*   Updated: Sat Sep 22 14:52:57 2018                        by elhmn        */
+/*   Updated: Wed Nov 28 14:06:58 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 require_once __API_DIR__ . '/actions/ActionRequest.class.php';
 require_once __API_DIR__ . '/extras/ExtraRequest.class.php';
 require_once __API_DIR__ . '/laborneeds/LaborNeedRequest.class.php';
+require_once __API_DIR__ . '/materialneeds/MaterialNeedRequest.class.php';
+require_once __API_DIR__ . '/actions/ActionPubRequest.class.php';
+require_once __API_DIR__ . '/actions/CreateActionPubRequest.class.php';
+require_once __API_DIR__ . '/actions/FeaturedActionsPubRequest.class.php';
+require_once __API_DIR__ . '/actions/CompletedActionsPubRequest.class.php';
+require_once __API_DIR__ . '/extras/ExtraPubRequest.class.php';
+require_once __API_DIR__ . '/search/SearchPubRequest.class.php';
+require_once __API_DIR__ . '/users/SignupPubRequest.class.php';
 
 //plateform toggler
 $ac_script = isset($_SERVER['AC_SCRIPT']);
@@ -39,7 +47,16 @@ function		IsHandledUri($uri)
 		return false;
 	}
 
-	if (empty($uri->apiKey))
+	if (empty($uri->apiType)
+		|| array_search($uri->apiType, Config::GetInstance()->apiTypes) === FALSE)
+	{
+		internal_error("require an api type ",
+						__FILE__, __LINE__);
+		http_error(400, 'require an api type');
+		return false;
+	}
+
+	if ($uri->apiType === "private" && empty($uri->apiKey))
 	{
 		internal_error("require an api key ",
 						__FILE__, __LINE__);
@@ -131,6 +148,8 @@ function		GetAuthorizations($apiKey)
 	}
 	$db->host = Config::GetInstance()->authHost;
 	$db->dbName = Config::GetInstance()->authDBName;
+	$db->dbPassword = Config::GetInstance()->authDBPassword;
+	$db->dbUserName = Config::GetInstance()->authDBUserName;
 	if (!($conn = $db->Connect()))
 	{
 		internal_error("conn set to null", __FILE__, __LINE__);
@@ -141,19 +160,31 @@ function		GetAuthorizations($apiKey)
 
 function		IsAuthorized($uri)
 {
-	$authorizations = (object) [
-		"postmethod" => Auths::ALL,
-		"getmethod" => Auths::ALL,
-		"patchmethod" => Auths::ALL,
-		"delmethod" => Auths::ALL,
-	];
+	if ($uri->apiType === "public")
+	{
+		$authorizations = (object) [
+			"postmethod" => Auths::NONE,
+			"getmethod" => Auths::NONE,
+			"patchmethod" => Auths::NONE,
+			"delmethod" => Auths::NONE,
+		];
+
+		return ($authorizations);
+	}
 
 	//This case is only used for testing purposes and must never be in producttion
 	if ($uri->apiKey === Config::GetInstance()->testApiKey)
 	{
+		$authorizations = (object) [
+			"postmethod" => Auths::ALL,
+			"getmethod" => Auths::ALL,
+			"patchmethod" => Auths::ALL,
+			"delmethod" => Auths::ALL,
+		];
+
 		return ($authorizations);
 	}
-	
+
 	if (!$uri)
 	{
 		internal_error("uri set to null",
@@ -172,13 +203,28 @@ function		IsAuthorized($uri)
 
 function		HandleRequest($uri, $db, $authorizations)
 {
-
-	$create = [
-		'users' => 'UserRequest',
-		'actions' => 'ActionRequest',
-		'extras' => 'ExtraRequest',
-		'laborneeds' => 'LaborNeedRequest',
-	];
+	if ($uri->apiType === "public")
+	{
+		$request = [
+			'actions' => 'ActionPubRequest',
+			'featuredactions' => 'FeaturedActionsPubRequest',
+			'completedactions' => 'CompletedActionsPubRequest',
+			'createaction' => 'CreateActionPubRequest',
+			'extras' => 'ExtraPubRequest',
+			'search' => 'SearchPubRequest',
+			'signup' => 'SignupPubRequest',
+		];
+	}
+	else if ($uri->apiType === "private")
+	{
+		$request = [
+			'users' => 'UserRequest',
+			'actions' => 'ActionRequest',
+			'extras' => 'ExtraRequest',
+			'laborneeds' => 'LaborNeedRequest',
+			'materialneeds' => 'MaterialNeedRequest',
+		];
+	}
 
 	$methods = [
 		'post' => 'Post',
@@ -204,7 +250,7 @@ function		HandleRequest($uri, $db, $authorizations)
 		return (-1);
 	}
 
-	$elem = new $create[$uri->endPoint]($db);
+	$elem = new $request[$uri->endPoint]($db);
 	if (!$elem)
 	{
 		internal_error("", __FILE__, __LINE__);
@@ -232,7 +278,7 @@ function		Run()
 	}
 	else
 	{
-		$uri = new Uri("v1/"
+		$uri = new Uri("v1/private/"
 				. Config::GetInstance()->testApiKey
 				. "/users", "get");
 	}

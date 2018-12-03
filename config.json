@@ -1,9 +1,15 @@
 {
+	"apiDBUserName" : "",
+	"authDBUserName" : "",
+ 	"apiDBPassword" : "",
+ 	"authDBPassword" : "",
+
 	"authHost" : "localhost",
 	"apiHost" : "localhost",
 	"dbUserName" : "root",
- 	"dbPassword" : "Hundezucht_",
+ 	"dbPassword" : "",
 	"apiDBName" : "actions_citoyennes",
 	"authDBName" : "ac_authentication",
+	
 	"testApiKey" : "test"
 }
