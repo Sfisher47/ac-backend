@@ -299,7 +299,71 @@
 
 		public function		Delete($kwargs)
 		{
-			http_error(400);
+			if (!$kwargs)
+			{
+				internal_error("kwargs not array or set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+			if (!isset($kwargs['id']))
+			{
+				internal_error("Wrong id", __FILE__, __LINE__);
+				http_error(400);
+				return (-1);
+			}
+
+			$id = $kwargs['id'];
+			$db = $kwargs["db"];
+			$auth = $kwargs["auth"];
+
+			if ($auth->delmethod === Auths::NONE)
+			{
+				http_error(403);
+				return (-1);
+			}
+
+			if ($auth->delmethod === Auths::OWN
+				&& !MaterialNeedRequestUtilities::IsOwn($db, $id, $auth->userid))
+			{
+				http_error(403);
+				return (-1);
+			}
+
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+			
+			// Delete materialneed
+			
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
+			
+			http_error(200);
 		}
 	}
 ?>
