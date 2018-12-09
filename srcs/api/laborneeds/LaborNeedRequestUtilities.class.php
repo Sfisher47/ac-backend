@@ -43,10 +43,11 @@ class		LaborNeedRequestUtilities
 			return (false);
 		}
 
-		$query = "SELECT * "
+		$query = "SELECT l.* "
 		."FROM LaborNeeds l "
 		."LEFT JOIN Actions a ON l.action_id = a.id "
-		."WHERE id = :id AND user_id = :userId";
+		."LEFT JOIN Extras e ON l.extra_id = e.id "
+		."WHERE (l.id = :id AND a.user_id = :userId) OR (l.id = :id AND e.user_id = :userId)";
 		
 		$conn = $db->Connect();
 		$stmt = $conn->prepare($query);
