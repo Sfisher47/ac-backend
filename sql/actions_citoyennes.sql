@@ -231,7 +231,7 @@ CREATE TABLE `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `firstname` varchar(40)  NULL,
   `lastname` varchar(40)  NULL,
-  `login` varchar(40) NOT NULL,
+  `login` varchar(40) NULL,
   `email` varchar(320) NOT NULL,
   `password` char(128) NOT NULL,
   `city` varchar(40)  NULL,
