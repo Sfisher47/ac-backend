@@ -1,11 +1,13 @@
 {
+	"apiDBUserName" : "",
+	"authDBUserName" : "",
+ 	"apiDBPassword" : "",
+ 	"authDBPassword" : "",
 
 	"authHost" : "localhost",
 	"apiHost" : "localhost",
-	"apiDBUserName" : "root",
-	"authDBUserName" : "root",
- 	"apiDBPassword" : "",
- 	"authDBPassword" : "",
+	"dbUserName" : "root",
+ 	"dbPassword" : "",
 	"apiDBName" : "actions_citoyennes",
 	"authDBName" : "ac_authentication",
 	"testApiKey" : "test"

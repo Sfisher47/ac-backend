@@ -203,7 +203,98 @@
 
 		public function		Patch($kwargs)
 		{
-			http_error(400);
+			if (!$kwargs
+					|| !is_array($kwargs))
+			{
+				internal_error('kwargs not array or set to null',
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			if (!isset($kwargs['id']))
+			{
+				internal_error("Wrong id", __FILE__, __LINE__);
+				http_error(400);
+				return (-1);
+			}
+
+			$id = $kwargs['id'];
+			$db = $kwargs["db"];
+			$auth = $kwargs["auth"];
+
+			if ($auth->patchmethod === Auths::NONE)
+			{
+				http_error(403);
+				return (-1);
+			}
+
+			if ($auth->patchmethod === Auths::OWN
+				&& !MaterialNeedRequestUtilities::IsOwn($db, $id, $auth->userid))
+			{
+				http_error(403);
+				return (-1);
+			}
+
+			if (!$db)
+			{
+				internal_error("db set to null", __FILE__, __LINE__);
+				return (-1);
+			}
+
+			if (!$GLOBALS['ac_script'])
+			{
+				$data = json_decode(file_get_contents("php://input"));
+				if (!$data)
+				{
+					internal_error("data set to null", __FILE__, __LINE__);
+					http_error(204); //No Content
+					return (-1);
+				}
+			}
+			
+			// Put update material here
+			
+			MaterialNeedRequestUtilities::SanitizeData($data);
+			
+			$query = 'UPDATE ' . $this->table . ' SET '
+			. ((isset($data->title)) ? 'title = :title,' : '')
+			. ((isset($data->unit)) ? 'unit = :unit,' : '')
+			. ((isset($data->description)) ? 'description = :description,' : '')
+			. ((isset($data->required)) ? 'required = :required,' : '')
+			. ((isset($data->collected)) ? 'collected = :collected,' : '')
+			. 'id = id'
+			. ' WHERE id = :id';			
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+				(isset($data->title)) ? $stmt->bindParam(':title', $data->title) : false;
+				(isset($data->unit)) ? $stmt->bindParam(':unit', $data->unit) : false;
+				(isset($data->description)) ? $stmt->bindParam(':description', $data->description) : false;
+				(isset($data->required)) ? $stmt->bindParam(':required', $data->required) : false;
+				(isset($data->collected)) ? $stmt->bindParam(':collected', $data->collected) : false;
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
+
+			http_error(200);
 		}
 
 		public function		Delete($kwargs)
