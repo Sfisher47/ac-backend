@@ -242,9 +242,47 @@
 					return (-1);
 				}
 			}
-
-			// Put update action here
-			// TO DO
+			
+			// Put update laborneed here
+			
+			LaborNeedRequestUtilities::SanitizeData($data);
+			
+			$query = 'UPDATE ' . $this->table . ' SET '
+			. ((isset($data->title)) ? 'title = :title,' : '')
+			. ((isset($data->description)) ? 'description = :description,' : '')
+			. ((isset($data->required)) ? 'required = :required,' : '')
+			. ((isset($data->collected)) ? 'collected = :collected,' : '')
+			. 'id = id'
+			. ' WHERE id = :id';			
+			
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+				(isset($data->title)) ? $stmt->bindParam(':title', $data->title) : false;
+				(isset($data->description)) ? $stmt->bindParam(':description', $data->description) : false;
+				(isset($data->required)) ? $stmt->bindParam(':required', $data->required) : false;
+				(isset($data->collected)) ? $stmt->bindParam(':collected', $data->collected) : false;
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);				
+			}
 
 			http_error(200);
 		}
