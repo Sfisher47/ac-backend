@@ -210,7 +210,33 @@
 			}
 			
 			// Delete laborcontrib
-			// TO DO
+			
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
 			
 			http_error(200);
 			
