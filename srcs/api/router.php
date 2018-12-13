@@ -224,7 +224,7 @@ function		HandleRequest($uri, $db, $authorizations)
 			'extras' => 'ExtraRequest',
 			'laborneeds' => 'LaborNeedRequest',
 			'materialneeds' => 'MaterialNeedRequest',
-			'laborcontribs' => 'LaborContributionRequest',
+			'laborcontributions' => 'LaborContributionRequest',
 		];
 	}
 
