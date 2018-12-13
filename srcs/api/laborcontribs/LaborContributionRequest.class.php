@@ -129,7 +129,7 @@
 
 			$query = 'INSERT INTO ' . $this->table . ' SET
 			laborNeed_id = :laborNeedId, '
-			. 'user_id = :userId, '
+			. 'user_id = :userId '
 			. (isset($data->action_id) ? ',action_id = :actionId' : '')
 			. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
 			. ';';
@@ -140,7 +140,7 @@
 			try
 			{
 				$stmt->bindParam(':userId', $auth->userid);
-				$stmt->bindParam(':laborNeedId', $data->laborNeedId);
+				$stmt->bindParam(':laborNeedId', $data->laborNeed_id);
 				isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
 				isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
 
