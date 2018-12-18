@@ -8,7 +8,7 @@
 /*             <nleme@live.fr>                                                */
 /*                                                                            */
 /*   Created:                                                 by elhmn        */
-/*   Updated: Sat Jul 07 10:10:42 2018                        by bmbarga      */
+/*   Updated: Sat Dec 01 23:32:00 2018                        by bmbarga      */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ function	http_error($code, $message = "", $messageIndex = 1)
 		return (-1);
 	}
 	http_response_code($code);
-	echo "{ \"error\" : "
+	echo "{ \"error\" : \""
 		. HttpError::$errorCodes[$code][0]
 			."\","
 			. " \"message\" : \""

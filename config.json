@@ -10,6 +10,5 @@
  	"dbPassword" : "",
 	"apiDBName" : "actions_citoyennes",
 	"authDBName" : "ac_authentication",
-	
 	"testApiKey" : "test"
 }
