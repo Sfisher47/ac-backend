@@ -69,9 +69,24 @@
 			}
 			
 			// Get one or all materialcontribs
-			// TO DO
+			
+			$query = (!$id) ? 'SELECT t0.* FROM ' . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t1.user_id = $auth->userid"
+						        : "SELECT t0.* FROM " . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t0.id = $id AND t1.user_id = $auth->userid";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
 
 			echo json_encode($ret);
+			
 		}
 
 		public function		Post($kwargs)
