@@ -167,9 +167,54 @@
 			}
 			
 			// Put update materialcontrib here
-			// TO DO
 			
-			http_error(200);
+			MaterialContributionRequestUtilities::SanitizeData($data);
+
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid)
+		  &&   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			{
+				internal_error("user isnt owner action or extra", __FILE__, __LINE__);
+				http_error(403);
+				return (-1);
+			}
+
+			$query = 'UPDATE ' . $this->table . ' SET
+			materialNeed_id = :materialNeedId '
+			//. 'user_id = :userId '
+			//. (isset($data->action_id) ? ',action_id = :actionId' : '')
+			//. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
+			. ';';
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			try
+			{
+				//$stmt->bindParam(':userId', $auth->userid);
+				$stmt->bindParam(':materialNeedId', $data->laborNeed_id);
+				//isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
+				//isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
+
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
+
+			http_error(201);
 		}
 
 		public function		Delete($kwargs)
