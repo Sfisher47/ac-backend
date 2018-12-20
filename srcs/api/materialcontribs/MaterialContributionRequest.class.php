@@ -215,7 +215,7 @@
 				return (-1);
 			}
 
-			http_error(201);
+			http_error(200);
 		}
 
 		public function		Delete($kwargs)
