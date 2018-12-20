@@ -179,18 +179,19 @@
 			}
 
 			$query = 'UPDATE ' . $this->table . ' SET
-			materialNeed_id = :materialNeedId '
+			materialNeed_id = :materialNeedId, '
 			//. 'user_id = :userId '
 			//. (isset($data->action_id) ? ',action_id = :actionId' : '')
 			//. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
-			. ';';
+			. 'id = id '
+			. 'WHERE id = :id';
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 
 			try
 			{
-				//$stmt->bindParam(':userId', $auth->userid);
+				$stmt->bindParam(':id', $id);
 				$stmt->bindParam(':materialNeedId', $data->laborNeed_id);
 				//isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
 				//isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
