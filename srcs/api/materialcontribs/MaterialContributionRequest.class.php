@@ -170,10 +170,9 @@
 			
 			MaterialContributionRequestUtilities::SanitizeData($data);
 
-			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid)
-		  &&   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			if ( !MaterialNeedRequestUtilities::IsOwn($db, $data->materialNeed_id, $auth->userid) )
 			{
-				internal_error("user isnt owner action or extra", __FILE__, __LINE__);
+				internal_error("user isnt owner Material Need", __FILE__, __LINE__);
 				http_error(403);
 				return (-1);
 			}
@@ -192,7 +191,7 @@
 			try
 			{
 				$stmt->bindParam(':id', $id);
-				$stmt->bindParam(':materialNeedId', $data->laborNeed_id);
+				$stmt->bindParam(':materialNeedId', $data->materialNeed_id);
 				//isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
 				//isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
 
