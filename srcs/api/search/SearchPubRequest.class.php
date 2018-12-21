@@ -62,7 +62,7 @@
 				. (isset($keyword) ? " Actions.description LIKE '%$keyword%' AND " : "")
 				. "Actions.id=Actions.id"
 				. ") mix LEFT JOIN Users usr ON usr.id=mix.user_id ";
-			$query = $baseQuery . " LIMIT 20";
+			$query = $baseQuery;
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
