@@ -25,6 +25,7 @@ class		MaterialContributionRequestUtilities
 		
 		
 		$data->materialNeed_id = (isset($data->materialNeed_id)) ? intval(htmlspecialchars(strip_tags(trim($data->materialNeed_id)))) : null ;
+		$data->amount = (isset($data->amount)) ? floatval(htmlspecialchars(strip_tags(trim($data->amount)))) : null ;
 		$data->action_id = (isset($data->action_id)) ? intval(htmlspecialchars(strip_tags(trim($data->action_id)))) : null ;
 		$data->extra_id = (isset($data->extra_id)) ? intval(htmlspecialchars(strip_tags(trim($data->extra_id)))) : null ;
 
