@@ -178,8 +178,9 @@
 				return (-1);
 			}
 
-			$query = 'UPDATE ' . $this->table . ' SET
-			materialNeed_id = :materialNeedId, '
+			$query = 'UPDATE ' . $this->table . ' SET '
+			//.'materialNeed_id = :materialNeedId, '
+			.'amount = :amount, '
 			//. 'user_id = :userId '
 			//. (isset($data->action_id) ? ',action_id = :actionId' : '')
 			//. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
@@ -192,7 +193,8 @@
 			try
 			{
 				$stmt->bindParam(':id', $id);
-				$stmt->bindParam(':materialNeedId', $data->materialNeed_id);
+				$stmt->bindParam(':amount', $data->amount);
+				//$stmt->bindParam(':materialNeedId', $data->materialNeed_id);
 				//isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
 				//isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
 
