@@ -170,13 +170,15 @@
 			// Put update materialcontrib here
 			
 			MaterialContributionRequestUtilities::SanitizeData($data);
-
+			
+			/*
 			if ( !MaterialNeedRequestUtilities::IsOwn($db, $data->materialNeed_id, $auth->userid) )
 			{
 				internal_error("user isnt owner Material Need", __FILE__, __LINE__);
 				http_error(403);
 				return (-1);
 			}
+			*/
 
 			$query = 'UPDATE ' . $this->table . ' SET '
 			//.'materialNeed_id = :materialNeedId, '
