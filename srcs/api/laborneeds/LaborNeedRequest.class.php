@@ -69,8 +69,10 @@
 
 
 			// Get one or all laborneeds
-			$query = (!$id) ? 'SELECT t0.* FROM ' . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE user_id = $auth->userid"
-						        : "SELECT t0.* FROM " . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t0.id = $id AND t1.user_id = $auth->userid";
+			$query = (!$id)
+				? 'SELECT lab.* FROM ' . $this->table . " lab LEFT JOIN Actions act ON lab.action_id = act.id LEFT JOIN Extras ext ON lab.extra_id = ext.id  WHERE act.user_id = $auth->userid OR ext.user_id = $auth->userid"
+				
+				: "SELECT lab.* FROM " . $this->table . " lab LEFT JOIN Actions act ON lab.action_id = act.id LEFT JOIN Extras ext ON lab.extra_id = ext.id WHERE (lab.id = $id AND act.user_id = $auth->userid) OR (lab.id = $id AND ext.user_id = $auth->userid)";
 
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
