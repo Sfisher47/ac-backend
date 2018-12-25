@@ -70,7 +70,20 @@
 			}
 			
 			// Get one or all materialcontribs
-			// TO DO
+			$query = (!$id) ? 'SELECT t0.* FROM ' . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t1.user_id = $auth->userid"
+						        : "SELECT t0.* FROM " . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t0.id = $id AND t1.user_id = $auth->userid";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
 
 			echo json_encode($ret);
 		}
@@ -112,7 +125,6 @@
 			}
 			
 			// Create materialcontrib
-			
 			MaterialContributionRequestUtilities::SanitizeData($data);
 			
 
@@ -166,7 +178,7 @@
 				http_error(400, $e->getMessage());
 				return (-1);
 			}
-
+      
 			http_error(201);
 		}
 
@@ -264,7 +276,33 @@
 			}
 			
 			// Delete materialcontrib
-			// TO DO
+
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
 			
 			http_error(200);
 			
