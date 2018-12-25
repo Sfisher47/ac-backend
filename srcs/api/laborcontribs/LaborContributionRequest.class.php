@@ -13,6 +13,8 @@
 /* ************************************************************************** */
 
 	require_once __API_DIR__ . '/IRequestHandler.class.php';
+	require_once __API_DIR__ . '/actions/ActionRequestUtilities.class.php';
+	require_once __API_DIR__ . '/extras/ExtraRequestUtilities.class.php';
 	require_once __API_DIR__ . '/laborcontribs/LaborContributionRequestUtilities.class.php';
 
 	class		LaborContributionRequest implements IRequestHandler
@@ -67,7 +69,22 @@
 			}
 			
 			// Get one or all laborcontribs
-			// TO DO
+			$query = (!$id)			
+				? 'SELECT lab.* FROM ' . $this->table . " lab LEFT JOIN Actions act ON lab.action_id = act.id LEFT JOIN Extras ext ON lab.extra_id = ext.id  WHERE lab.user_id = $auth->userid"
+				
+				: "SELECT lab.* FROM " . $this->table . " lab LEFT JOIN Actions act ON lab.action_id = act.id LEFT JOIN Extras ext ON lab.extra_id = ext.id WHERE (lab.id = $id AND lab.user_id = $auth->userid)";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
 
 			echo json_encode($ret);
 		}
@@ -109,8 +126,58 @@
 			}
 			
 			// Create laborcontrib
-			// TO DO
-			
+
+			LaborContributionRequestUtilities::SanitizeData($data);
+
+			if ( isset($data->action_id) && isset($data->extra_id) )
+			{
+				$data->extra_id = null;
+			}
+
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid)
+		  &&   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			{
+				internal_error("user isnt owner action or extra", __FILE__, __LINE__);
+				http_error(403);
+				return (-1);
+			}
+
+			$query = 'INSERT INTO ' . $this->table . ' SET
+			laborNeed_id = :laborNeedId, '
+			. 'user_id = :userId '
+			. (isset($data->action_id) ? ',action_id = :actionId' : '')
+			. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
+			. ';';
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			try
+			{
+				$stmt->bindParam(':userId', $auth->userid);
+				$stmt->bindParam(':laborNeedId', $data->laborNeed_id);
+				isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
+				isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
+
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
+
 			http_error(201);
 		}
 
@@ -208,7 +275,33 @@
 			}
 			
 			// Delete laborcontrib
-			// TO DO
+			
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
 			
 			http_error(200);
 			

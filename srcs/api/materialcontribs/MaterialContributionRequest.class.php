@@ -70,12 +70,10 @@
 			}
 			
 			// Get one or all materialcontribs
-			
 			$query = (!$id) 
 				? 'SELECT mat.* FROM ' . $this->table . " mat LEFT JOIN Actions act ON mat.action_id = act.id LEFT JOIN Extras ext ON mat.extra_id = ext.id  WHERE mat.user_id = $auth->userid"
 				
 				: "SELECT mat.* FROM " . $this->table . " mat LEFT JOIN Actions act ON mat.action_id = act.id LEFT JOIN Extras ext ON mat.extra_id = ext.id WHERE (mat.id = $id AND mat.user_id = $auth->userid)";
-
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 
@@ -129,8 +127,60 @@
 			}
 			
 			// Create materialcontrib
-			// TO DO
+			MaterialContributionRequestUtilities::SanitizeData($data);
 			
+
+			if ( isset($data->action_id) && isset($data->extra_id) )
+			{
+				$data->extra_id = null;
+			}
+
+			if ( !ActionRequestUtilities::IsOwn($db, $data->action_id, $auth->userid)
+		  &&   !ExtraRequestUtilities::IsOwn($db, $data->extra_id, $auth->userid) )
+			{
+				internal_error("user isnt owner action or extra", __FILE__, __LINE__);
+				http_error(403);
+				return (-1);
+			}
+
+			$query = 'INSERT INTO ' . $this->table . ' SET
+			materialNeed_id = :materialNeedId, '
+			. 'amount = :amount, '
+			. 'user_id = :userId '
+			. (isset($data->action_id) ? ',action_id = :actionId' : '')
+			. (isset($data->extra_id) ?  ',extra_id = :extraId' : '')
+			. ';';
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			try
+			{
+				$stmt->bindParam(':userId', $auth->userid);
+				$stmt->bindParam(':amount', $data->amount);
+				$stmt->bindParam(':materialNeedId', $data->materialNeed_id);
+				isset($data->action_id) ? $stmt->bindParam(':actionId', $data->action_id) : false;
+				isset($data->extra_id) ? $stmt->bindParam(':extraId', $data->extra_id) : false;
+
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+								__FILE__, __LINE__);
+				return (-1);
+			}
+
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : ". $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
+      
 			http_error(201);
 		}
 
@@ -228,7 +278,33 @@
 			}
 			
 			// Delete materialcontrib
-			// TO DO
+
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
 			
 			http_error(200);
 			
