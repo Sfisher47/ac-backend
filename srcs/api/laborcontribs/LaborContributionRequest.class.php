@@ -69,7 +69,22 @@
 			}
 			
 			// Get one or all laborcontribs
-			// TO DO
+			$query = (!$id)			
+				? 'SELECT lab.* FROM ' . $this->table . " lab LEFT JOIN Actions act ON lab.action_id = act.id LEFT JOIN Extras ext ON lab.extra_id = ext.id  WHERE lab.user_id = $auth->userid"
+				
+				: "SELECT lab.* FROM " . $this->table . " lab LEFT JOIN Actions act ON lab.action_id = act.id LEFT JOIN Extras ext ON lab.extra_id = ext.id WHERE (lab.id = $id AND lab.user_id = $auth->userid)";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+
+			$stmt->execute();
+			$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (!$ret)
+			{
+				echo '{"response" : "nothing found"}';
+				return (0);
+			}
 
 			echo json_encode($ret);
 		}
@@ -260,7 +275,33 @@
 			}
 			
 			// Delete laborcontrib
-			// TO DO
+			
+			$query = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+			$conn = $db->Connect();
+			$stmt = $conn->prepare($query);
+			
+			try
+			{
+				$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->bindParam : " . $e->getMessage(),
+							__FILE__, __LINE__);
+				return (-1);
+			}
+			
+			try
+			{
+				$stmt->execute();
+			}
+			catch (Exception $e)
+			{
+				internal_error("stmt->execute : " . $e->getMessage(), __FILE__, __LINE__);
+				http_error(400, $e->getMessage());
+				return (-1);
+			}
 			
 			http_error(200);
 			
