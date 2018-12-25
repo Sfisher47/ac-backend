@@ -70,9 +70,10 @@
 			}
 			
 			// Get one or all materialcontribs
-			$query = (!$id) ? 'SELECT t0.* FROM ' . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t1.user_id = $auth->userid"
-						        : "SELECT t0.* FROM " . $this->table . " t0 JOIN Actions t1 ON t0.action_id = t1.id WHERE t0.id = $id AND t1.user_id = $auth->userid";
-
+			$query = (!$id) 
+				? 'SELECT mat.* FROM ' . $this->table . " mat LEFT JOIN Actions act ON mat.action_id = act.id LEFT JOIN Extras ext ON mat.extra_id = ext.id  WHERE mat.user_id = $auth->userid"
+				
+				: "SELECT mat.* FROM " . $this->table . " mat LEFT JOIN Actions act ON mat.action_id = act.id LEFT JOIN Extras ext ON mat.extra_id = ext.id WHERE (mat.id = $id AND mat.user_id = $auth->userid)";
 			$conn = $db->Connect();
 			$stmt = $conn->prepare($query);
 
@@ -86,6 +87,7 @@
 			}
 
 			echo json_encode($ret);
+			
 		}
 
 		public function		Post($kwargs)
