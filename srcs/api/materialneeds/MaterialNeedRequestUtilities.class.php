@@ -24,6 +24,7 @@ class		MaterialNeedRequestUtilities
 
 		$data->id = (isset($data->id)) ? htmlspecialchars(strip_tags(trim($data->id))) : null ;
 		$data->title = (isset($data->title)) ? htmlspecialchars(strip_tags(trim($data->title))) : null ;
+		$data->unit = (isset($data->unit)) ? htmlspecialchars(strip_tags(trim($data->unit))) : null ;
 		$data->description = (isset($data->description)) ? htmlspecialchars(strip_tags(trim($data->description))) : null ;
 		$data->required = (isset($data->required)) ? doubleval(htmlspecialchars(strip_tags(trim($data->required)))) : null ;
 		$data->unit = (isset($data->unit)) ? htmlspecialchars(strip_tags(trim($data->unit))) : null ;
@@ -44,9 +45,10 @@ class		MaterialNeedRequestUtilities
 		}
 
 		$query = "SELECT * "
-		."FROM MaterialNeeds l "
-		."LEFT JOIN Actions a ON l.action_id = a.id "
-		."WHERE id = :id AND user_id = :userId";
+		."FROM MaterialNeeds m "
+		."LEFT JOIN Actions a ON m.action_id = a.id "
+		."LEFT JOIN Extras e ON m.extra_id = e.id "
+		."WHERE (m.id = :id AND a.user_id = :userId) OR (m.id = :id AND e.user_id = :userId)";
 
 		$conn = $db->Connect();
 		$stmt = $conn->prepare($query);
